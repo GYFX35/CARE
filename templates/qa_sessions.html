@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Q&A Sessions</h1>
+    {% if current_user.is_expert %}
+    <p><a href="{{ url_for('schedule_qa') }}">Schedule a new session</a></p>
+    {% endif %}
+    <hr>
+    {% for session in sessions %}
+        <article>
+            <h2><a href="{{ url_for('qa_session', id=session.id) }}">{{ session.title }}</a></h2>
+            <p>with <a href="{{ url_for('user', username=session.author.username) }}">{{ session.author.username }}</a></p>
+            <p>From: {{ session.start_time.strftime('%Y-%m-%d %H:%M:%S') }} To: {{ session.end_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p>{{ session.description }}</p>
+        </article>
+    {% endfor %}
+{% endblock %}

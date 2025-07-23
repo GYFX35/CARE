@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Resource Library</h1>
+    <p><a href="{{ url_for('add_resource') }}">Add a new resource</a></p>
+    <hr>
+    {% for resource in resources %}
+        <article>
+            <h2><a href="{{ resource.url }}">{{ resource.title }}</a></h2>
+            <p>Type: {{ resource.resource_type }}</p>
+            <p>{{ resource.description }}</p>
+        </article>
+    {% endfor %}
+{% endblock %}
