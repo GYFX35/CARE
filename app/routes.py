@@ -1,7 +1,8 @@
 from flask import render_template, request, redirect, url_for, flash, g, jsonify
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm
-from app.models import User, Post, Comment, Category, Tag, Vote
+from datetime import datetime
+from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm
+from app.models import User, Post, Comment, Category, Tag, Vote, Message
 from flask_login import current_user, login_user, logout_user, login_required
 
 @app.before_request
@@ -112,6 +113,30 @@ def notifications():
         'data': n.get_data(),
         'timestamp': n.timestamp
     } for n in notifications])
+
+@app.route('/send_message/<recipient>', methods=['GET', 'POST'])
+@login_required
+def send_message(recipient):
+    user = User.query.filter_by(username=recipient).first_or_404()
+    form = MessageForm()
+    if form.validate_on_submit():
+        msg = Message(author=current_user, recipient=user,
+                      body=form.message.data)
+        db.session.add(msg)
+        db.session.commit()
+        flash('Your message has been sent.')
+        return redirect(url_for('user', username=recipient))
+    return render_template('send_message.html', title='Send Message',
+                           form=form, recipient=recipient)
+
+@app.route('/messages')
+@login_required
+def messages():
+    current_user.last_message_read_time = datetime.utcnow()
+    db.session.commit()
+    messages = current_user.messages_received.order_by(
+        Message.timestamp.desc()).all()
+    return render_template('messages.html', messages=messages)
 
 @app.route('/search')
 @login_required
