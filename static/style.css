@@ -10,6 +10,15 @@ header {
     text-align: center;
 }
 
+@media screen and (max-width: 600px) {
+    nav, .add-post form {
+        flex-direction: column;
+    }
+    nav a, nav form {
+        margin-bottom: 0.5em;
+    }
+}
+
 main {
     padding: 1em;
 }
