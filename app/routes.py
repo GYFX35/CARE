@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, url_for, flash, g, jsonify
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm
-from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession
+from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm
+from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource
 from flask_login import current_user, login_user, logout_user, login_required
 
 @app.before_request
@@ -165,6 +165,26 @@ def qa_sessions():
 def qa_session(id):
     session = QASession.query.get_or_404(id)
     return render_template('qa_session.html', title=session.title, session=session)
+
+@app.route('/resources')
+def resources():
+    resources = Resource.query.all()
+    return render_template('resources.html', title='Resources', resources=resources)
+
+@app.route('/add_resource', methods=['GET', 'POST'])
+@login_required
+def add_resource():
+    form = ResourceForm()
+    if form.validate_on_submit():
+        resource = Resource(title=form.title.data,
+                              description=form.description.data,
+                              url=form.url.data,
+                              resource_type=form.resource_type.data)
+        db.session.add(resource)
+        db.session.commit()
+        flash('The resource has been added.')
+        return redirect(url_for('resources'))
+    return render_template('add_resource.html', title='Add Resource', form=form)
 
 @app.route('/search')
 @login_required

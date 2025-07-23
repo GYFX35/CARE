@@ -6,6 +6,13 @@ from app.models import User, Category
 
 from wtforms import DateTimeField
 
+class ResourceForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = StringField('Description', validators=[DataRequired()])
+    url = StringField('URL', validators=[DataRequired()])
+    resource_type = StringField('Resource Type', validators=[DataRequired()])
+    submit = SubmitField('Add Resource')
+
 class QASessionForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = StringField('Description', validators=[DataRequired()])

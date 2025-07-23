@@ -63,6 +63,13 @@ class Notification(db.Model):
     def get_data(self):
         return json.loads(str(self.payload_json))
 
+class Resource(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(140))
+    description = db.Column(db.Text)
+    url = db.Column(db.String(200))
+    resource_type = db.Column(db.String(50))
+
 class QASession(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     expert_id = db.Column(db.Integer, db.ForeignKey('user.id'))
