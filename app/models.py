@@ -26,6 +26,11 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
+    @classmethod
+    def search(cls, query, page, per_page):
+        search = Post.query.filter(Post.title.contains(query) | Post.content.contains(query))
+        return search.offset((page - 1) * per_page).limit(per_page).all(), search.count()
+
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))

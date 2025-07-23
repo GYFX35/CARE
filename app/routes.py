@@ -1,8 +1,12 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, g
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm
+from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm
 from app.models import User, Post, Comment
 from flask_login import current_user, login_user, logout_user, login_required
+
+@app.before_request
+def before_request():
+    g.search_form = SearchForm()
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -57,6 +61,14 @@ def post(id):
         return redirect(url_for('post', id=post.id))
     comments = post.comments.all()
     return render_template('post.html', post=post, form=form, comments=comments)
+
+@app.route('/search')
+@login_required
+def search():
+    if not g.search_form.validate():
+        return redirect(url_for('index'))
+    posts, total = Post.search(g.search_form.q.data, 1, 10)
+    return render_template('search.html', title='Search', posts=posts)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
