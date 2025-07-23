@@ -20,17 +20,17 @@
     </article>
     <hr>
     <section class="comments">
-        <h3>Comments</h3>
+        <h3>{{ _('Comments') }}</h3>
         {% for comment in comments %}
             <article>
-                <p><a href="{{ url_for('user', username=comment.author.username) }}">{{ comment.author.username }}</a> says:</p>
+                <p><a href="{{ url_for('user', username=comment.author.username) }}">{{ comment.author.username }}</a> {{ _('says:') }}</p>
                 <p>{{ comment.body }}</p>
             </article>
         {% endfor %}
     </section>
     <hr>
     <section class="add-comment">
-        <h3>Add a comment</h3>
+        <h3>{{ _('Add a comment') }}</h3>
         <form action="" method="post">
             {{ form.hidden_tag() }}
             <p>
@@ -40,7 +40,7 @@
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
-            <p>{{ form.submit() }}</p>
+            <p>{{ form.submit(_('Submit')) }}</p>
         </form>
     </section>
 {% endblock %}

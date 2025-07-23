@@ -186,6 +186,11 @@ def add_resource():
         return redirect(url_for('resources'))
     return render_template('add_resource.html', title='Add Resource', form=form)
 
+@app.route('/language/<language>')
+def set_language(language=None):
+    session['lang'] = language
+    return redirect(url_for('index'))
+
 @app.route('/search')
 @login_required
 def search():

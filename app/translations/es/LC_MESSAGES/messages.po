@@ -1,0 +1,130 @@
+# Spanish translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-07-23 19:53+0000\n"
+"PO-Revision-Date: 2025-07-23 19:53+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es\n"
+"Language-Team: es <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "CARE"
+msgstr "CUIDADO"
+
+msgid "Home"
+msgstr "Inicio"
+
+msgid "Login"
+msgstr "Iniciar sesión"
+
+msgid "Register"
+msgstr "Registrarse"
+
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Messages"
+msgstr "Mensajes"
+
+msgid "Q&A Sessions"
+msgstr "Sesiones de preguntas y respuestas"
+
+msgid "Resources"
+msgstr "Recursos"
+
+msgid "Search"
+msgstr "Buscar"
+
+msgid "Go"
+msgstr "Ir"
+
+msgid "Hi, %(username)s!"
+msgstr "¡Hola, %(username)s!"
+
+msgid "Submit"
+msgstr "Enviar"
+
+msgid "Sign In"
+msgstr "Iniciar sesión"
+
+msgid "New User?"
+msgstr "¿Nuevo usuario?"
+
+msgid "Click to Register!"
+msgstr "¡Haga clic para registrarse!"
+
+msgid "User: %(username)s"
+msgstr "Usuario: %(username)s"
+
+msgid "Send private message"
+msgstr "Enviar mensaje privado"
+
+msgid "Comments"
+msgstr "Comentarios"
+
+msgid "says:"
+msgstr "dice:"
+
+msgid "Add a comment"
+msgstr "Añadir un comentario"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Resource Type"
+msgstr "Tipo de recurso"
+
+msgid "Add Resource"
+msgstr "Añadir recurso"
+
+msgid "Start Time"
+msgstr "Hora de inicio"
+
+msgid "End Time"
+msgstr "Hora de finalización"
+
+msgid "Schedule"
+msgstr "Programar"
+
+msgid "Message"
+msgstr "Mensaje"
+
+msgid "Comment"
+msgstr "Comentario"
+
+msgid "Tags (comma separated)"
+msgstr "Etiquetas (separadas por comas)"
+
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgid "Password"
+msgstr "Contraseña"
+
+msgid "Remember Me"
+msgstr "Recuérdame"
+
+msgid "Repeat Password"
+msgstr "Repetir contraseña"
+
+msgid "Email"
+msgstr "Correo electrónico"

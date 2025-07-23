@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>User: {{ user.username }}</h1>
-    <p><a href="{{ url_for('send_message', recipient=user.username) }}">Send private message</a></p>
+    <h1>{{ _('User: %(username)s', username=user.username) }}</h1>
+    <p><a href="{{ url_for('send_message', recipient=user.username) }}">{{ _('Send private message') }}</a></p>
     <hr>
     {% for post in posts %}
     <article>

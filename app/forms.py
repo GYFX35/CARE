@@ -1,5 +1,6 @@
 from flask import request
 from flask_wtf import FlaskForm
+from flask_babel import lazy_gettext as _l
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User, Category
@@ -7,25 +8,25 @@ from app.models import User, Category
 from wtforms import DateTimeField
 
 class ResourceForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
-    url = StringField('URL', validators=[DataRequired()])
-    resource_type = StringField('Resource Type', validators=[DataRequired()])
-    submit = SubmitField('Add Resource')
+    title = StringField(_l('Title'), validators=[DataRequired()])
+    description = StringField(_l('Description'), validators=[DataRequired()])
+    url = StringField(_l('URL'), validators=[DataRequired()])
+    resource_type = StringField(_l('Resource Type'), validators=[DataRequired()])
+    submit = SubmitField(_l('Add Resource'))
 
 class QASessionForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
-    start_time = DateTimeField('Start Time', format='%Y-%m-%d %H:%M:%S')
-    end_time = DateTimeField('End Time', format='%Y-%m-%d %H:%M:%S')
-    submit = SubmitField('Schedule')
+    title = StringField(_l('Title'), validators=[DataRequired()])
+    description = StringField(_l('Description'), validators=[DataRequired()])
+    start_time = DateTimeField(_l('Start Time'), format='%Y-%m-%d %H:%M:%S')
+    end_time = DateTimeField(_l('End Time'), format='%Y-%m-%d %H:%M:%S')
+    submit = SubmitField(_l('Schedule'))
 
 class MessageForm(FlaskForm):
-    message = StringField('Message', validators=[DataRequired()])
-    submit = SubmitField('Submit')
+    message = StringField(_l('Message'), validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
 
 class SearchForm(FlaskForm):
-    q = StringField('Search', validators=[DataRequired()])
+    q = StringField(_l('Search'), validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
         if 'formdata' not in kwargs:
@@ -36,8 +37,8 @@ class SearchForm(FlaskForm):
 
 
 class CommentForm(FlaskForm):
-    body = StringField('Comment', validators=[DataRequired()])
-    submit = SubmitField('Submit')
+    body = StringField(_l('Comment'), validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
 
 from wtforms_sqlalchemy.fields import QuerySelectField
 
@@ -45,25 +46,25 @@ def category_query():
     return Category.query
 
 class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    content = StringField('Content', validators=[DataRequired()])
-    category = QuerySelectField(query_factory=category_query, allow_blank=True)
-    tags = StringField('Tags (comma separated)')
-    submit = SubmitField('Submit')
+    title = StringField(_l('Title'), validators=[DataRequired()])
+    content = StringField(_l('Content'), validators=[DataRequired()])
+    category = QuerySelectField(query_factory=category_query, allow_blank=True, get_label='name')
+    tags = StringField(_l('Tags (comma separated)'))
+    submit = SubmitField(_l('Submit'))
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+    username = StringField(_l('Username'), validators=[DataRequired()])
+    password = PasswordField(_l('Password'), validators=[DataRequired()])
+    remember_me = BooleanField(_l('Remember Me'))
+    submit = SubmitField(_l('Sign In'))
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    username = StringField(_l('Username'), validators=[DataRequired()])
+    email = StringField(_l('Email'), validators=[DataRequired(), Email()])
+    password = PasswordField(_l('Password'), validators=[DataRequired()])
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
+        _l('Repeat Password'), validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField(_l('Register'))
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()

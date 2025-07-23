@@ -8,24 +8,26 @@
 </head>
 <body>
     <header>
-        <h1><a href="{{ url_for('index') }}">CARE</a></h1>
+        <h1><a href="{{ url_for('index') }}">{{ _('CARE') }}</a></h1>
         <nav>
-            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('index') }}">{{ _('Home') }}</a>
             {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('register') }}">Register</a>
+            <a href="{{ url_for('login') }}">{{ _('Login') }}</a>
+            <a href="{{ url_for('register') }}">{{ _('Register') }}</a>
             {% else %}
-            <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
-            <a href="{{ url_for('messages') }}">Messages</a>
-            <a href="{{ url_for('qa_sessions') }}">Q&A Sessions</a>
-            <a href="{{ url_for('resources') }}">Resources</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('user', username=current_user.username) }}">{{ _('Profile') }}</a>
+            <a href="{{ url_for('messages') }}">{{ _('Messages') }}</a>
+            <a href="{{ url_for('qa_sessions') }}">{{ _('Q&A Sessions') }}</a>
+            <a href="{{ url_for('resources') }}">{{ _('Resources') }}</a>
+            <a href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
             <span id="comment_count" style="visibility: hidden;"></span>
             {% endif %}
             <form action="{{ url_for('search') }}" method="get">
-                {{ g.search_form.q(size=20, placeholder="Search") }}
-                <input type="submit" value="Go">
+                {{ g.search_form.q(size=20, placeholder=_('Search')) }}
+                <input type="submit" value="{{ _('Go') }}">
             </form>
+            <a href="{{ url_for('set_language', language='en') }}">English</a>
+            <a href="{{ url_for('set_language', language='es') }}">Español</a>
         </nav>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </header>
