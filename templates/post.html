@@ -6,6 +6,10 @@
         <p>by <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a></p>
         <p>{{ post.content }}</p>
         <p>
+            <span>({{ post.votes }} votes)</span>
+            <a href="{{ url_for('upvote', post_id=post.id) }}">Upvote</a>
+        </p>
+        <p>
             Category: <a href="{{ url_for('category', id=post.category.id) }}">{{ post.category.name }}</a>
             |
             Tags:

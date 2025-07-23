@@ -19,7 +19,7 @@ class CommentForm(FlaskForm):
     body = StringField('Comment', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms_sqlalchemy.fields import QuerySelectField
 
 def category_query():
     return Category.query

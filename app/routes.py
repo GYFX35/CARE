@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, g
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm
-from app.models import User, Post, Comment, Category, Tag
+from app.models import User, Post, Comment, Category, Tag, Vote
 from flask_login import current_user, login_user, logout_user, login_required
 
 @app.before_request
@@ -84,6 +84,21 @@ def tag(id):
     tag = Tag.query.get_or_404(id)
     posts = tag.posts
     return render_template('tag.html', tag=tag, posts=posts)
+
+@app.route('/upvote/<int:post_id>')
+@login_required
+def upvote(post_id):
+    post = Post.query.get_or_404(post_id)
+    vote = Vote.query.filter_by(user_id=current_user.id, post_id=post.id).first()
+    if vote:
+        flash('You have already voted on this post.')
+        return redirect(url_for('index'))
+    post.votes += 1
+    vote = Vote(user_id=current_user.id, post_id=post.id)
+    db.session.add(vote)
+    db.session.commit()
+    flash('You have successfully upvoted this post.')
+    return redirect(url_for('index'))
 
 @app.route('/search')
 @login_required
