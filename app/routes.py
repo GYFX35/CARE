@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, url_for, flash, g, jsonify
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm
-from app.models import User, Post, Comment, Category, Tag, Vote, Message
+from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm
+from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession
 from flask_login import current_user, login_user, logout_user, login_required
 
 @app.before_request
@@ -137,6 +137,34 @@ def messages():
     messages = current_user.messages_received.order_by(
         Message.timestamp.desc()).all()
     return render_template('messages.html', messages=messages)
+
+@app.route('/schedule_qa', methods=['GET', 'POST'])
+@login_required
+def schedule_qa():
+    if not current_user.is_expert:
+        flash('Only experts can schedule Q&A sessions.')
+        return redirect(url_for('index'))
+    form = QASessionForm()
+    if form.validate_on_submit():
+        session = QASession(expert_id=current_user.id, title=form.title.data,
+                              description=form.description.data,
+                              start_time=form.start_time.data,
+                              end_time=form.end_time.data)
+        db.session.add(session)
+        db.session.commit()
+        flash('Your Q&A session has been scheduled.')
+        return redirect(url_for('index'))
+    return render_template('schedule_qa.html', title='Schedule Q&A', form=form)
+
+@app.route('/qa_sessions')
+def qa_sessions():
+    sessions = QASession.query.order_by(QASession.start_time.asc()).all()
+    return render_template('qa_sessions.html', title='Q&A Sessions', sessions=sessions)
+
+@app.route('/qa_session/<int:id>')
+def qa_session(id):
+    session = QASession.query.get_or_404(id)
+    return render_template('qa_session.html', title=session.title, session=session)
 
 @app.route('/search')
 @login_required

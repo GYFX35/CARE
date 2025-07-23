@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <article>
+        <h1>{{ session.title }}</h1>
+        <p>with <a href="{{ url_for('user', username=session.author.username) }}">{{ session.author.username }}</a></p>
+        <p>From: {{ session.start_time.strftime('%Y-%m-%d %H:%M:%S') }} To: {{ session.end_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        <p>{{ session.description }}</p>
+    </article>
+    <hr>
+    {# Q&A functionality will be added here in a future step #}
+{% endblock %}

@@ -4,6 +4,15 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User, Category
 
+from wtforms import DateTimeField
+
+class QASessionForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = StringField('Description', validators=[DataRequired()])
+    start_time = DateTimeField('Start Time', format='%Y-%m-%d %H:%M:%S')
+    end_time = DateTimeField('End Time', format='%Y-%m-%d %H:%M:%S')
+    submit = SubmitField('Schedule')
+
 class MessageForm(FlaskForm):
     message = StringField('Message', validators=[DataRequired()])
     submit = SubmitField('Submit')

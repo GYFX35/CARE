@@ -19,6 +19,7 @@ class User(UserMixin, db.Model):
                                         foreign_keys='Message.recipient_id',
                                         backref='recipient', lazy='dynamic')
     last_message_read_time = db.Column(db.DateTime)
+    is_expert = db.Column(db.Boolean, default=False)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -61,6 +62,14 @@ class Notification(db.Model):
 
     def get_data(self):
         return json.loads(str(self.payload_json))
+
+class QASession(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    expert_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    title = db.Column(db.String(140))
+    description = db.Column(db.Text)
+    start_time = db.Column(db.DateTime, index=True)
+    end_time = db.Column(db.DateTime, index=True)
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
