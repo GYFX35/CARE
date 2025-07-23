@@ -19,6 +19,7 @@
             <a href="{{ url_for('messages') }}">{{ _('Messages') }}</a>
             <a href="{{ url_for('qa_sessions') }}">{{ _('Q&A Sessions') }}</a>
             <a href="{{ url_for('resources') }}">{{ _('Resources') }}</a>
+            <a href="{{ url_for('visualizations') }}">{{ _('Visualizations') }}</a>
             <a href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
             <span id="comment_count" style="visibility: hidden;"></span>
             {% endif %}
@@ -67,5 +68,6 @@
     <footer>
         <p>&copy; 2025 CARE</p>
     </footer>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

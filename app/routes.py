@@ -1,4 +1,5 @@
 from flask import render_template, request, redirect, url_for, flash, g, jsonify
+from sqlalchemy import func
 from app import app, db
 from datetime import datetime
 from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm
@@ -185,6 +186,17 @@ def add_resource():
         flash('The resource has been added.')
         return redirect(url_for('resources'))
     return render_template('add_resource.html', title='Add Resource', form=form)
+
+@app.route('/data/posts_per_category')
+def data_posts_per_category():
+    data = db.session.query(Category.name, func.count(Post.id)).join(Post).group_by(Category.name).all()
+    labels = [row[0] for row in data]
+    values = [row[1] for row in data]
+    return jsonify({'labels': labels, 'values': values})
+
+@app.route('/visualizations')
+def visualizations():
+    return render_template('visualizations.html', title='Data Visualizations')
 
 @app.route('/language/<language>')
 def set_language(language=None):
