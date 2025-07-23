@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
-from app.models import User, Post
+from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm
+from app.models import User, Post, Comment
 from flask_login import current_user, login_user, logout_user, login_required
 
 @app.route('/', methods=['GET', 'POST'])
@@ -43,6 +43,20 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = user.posts.all()
     return render_template('user.html', user=user, posts=posts)
+
+@app.route('/post/<int:id>', methods=['GET', 'POST'])
+@login_required
+def post(id):
+    post = Post.query.get_or_404(id)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(body=form.body.data, post=post, author=current_user)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Your comment has been published.')
+        return redirect(url_for('post', id=post.id))
+    comments = post.comments.all()
+    return render_template('post.html', post=post, form=form, comments=comments)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

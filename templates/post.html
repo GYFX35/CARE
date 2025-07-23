@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <article>
+        <h2>{{ post.title }}</h2>
+        <p>by <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a></p>
+        <p>{{ post.content }}</p>
+    </article>
+    <hr>
+    <section class="comments">
+        <h3>Comments</h3>
+        {% for comment in comments %}
+            <article>
+                <p><a href="{{ url_for('user', username=comment.author.username) }}">{{ comment.author.username }}</a> says:</p>
+                <p>{{ comment.body }}</p>
+            </article>
+        {% endfor %}
+    </section>
+    <hr>
+    <section class="add-comment">
+        <h3>Add a comment</h3>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.body.label }}<br>
+                {{ form.body(cols=35, rows=4) }}<br>
+                {% for error in form.body.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </section>
+{% endblock %}
