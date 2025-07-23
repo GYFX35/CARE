@@ -19,17 +19,34 @@ class User(UserMixin, db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
+tags = db.Table('tags',
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True),
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True)
+)
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(140))
     content = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    tags = db.relationship('Tag', secondary=tags, lazy='subquery',
+        backref=db.backref('posts', lazy=True))
 
     @classmethod
     def search(cls, query, page, per_page):
         search = Post.query.filter(Post.title.contains(query) | Post.content.contains(query))
         return search.offset((page - 1) * per_page).limit(per_page).all(), search.count()
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    posts = db.relationship('Post', backref='category', lazy=True)
+
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)

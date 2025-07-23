@@ -2,7 +2,7 @@ from flask import request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
-from app.models import User
+from app.models import User, Category
 
 class SearchForm(FlaskForm):
     q = StringField('Search', validators=[DataRequired()])
@@ -19,9 +19,16 @@ class CommentForm(FlaskForm):
     body = StringField('Comment', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
+
+def category_query():
+    return Category.query
+
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = StringField('Content', validators=[DataRequired()])
+    category = QuerySelectField(query_factory=category_query, allow_blank=True)
+    tags = StringField('Tags (comma separated)')
     submit = SubmitField('Submit')
 
 class LoginForm(FlaskForm):

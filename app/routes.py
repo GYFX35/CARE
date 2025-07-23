@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, g
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm
-from app.models import User, Post, Comment
+from app.models import User, Post, Comment, Category, Tag
 from flask_login import current_user, login_user, logout_user, login_required
 
 @app.before_request
@@ -13,8 +13,19 @@ def before_request():
 @login_required
 def index():
     form = PostForm()
+    if not Category.query.first():
+        db.session.add(Category(name='Health'))
+        db.session.add(Category(name='Education'))
+        db.session.add(Category(name='Technology'))
+        db.session.commit()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        post = Post(title=form.title.data, content=form.content.data, author=current_user, category=form.category.data)
+        tags = form.tags.data.split(',')
+        for tag_name in tags:
+            tag = Tag.query.filter_by(name=tag_name.strip()).first()
+            if not tag:
+                tag = Tag(name=tag_name.strip())
+            post.tags.append(tag)
         db.session.add(post)
         db.session.commit()
         flash('Your post is now live!')
@@ -61,6 +72,18 @@ def post(id):
         return redirect(url_for('post', id=post.id))
     comments = post.comments.all()
     return render_template('post.html', post=post, form=form, comments=comments)
+
+@app.route('/category/<int:id>')
+def category(id):
+    category = Category.query.get_or_404(id)
+    posts = category.posts
+    return render_template('category.html', category=category, posts=posts)
+
+@app.route('/tag/<int:id>')
+def tag(id):
+    tag = Tag.query.get_or_404(id)
+    posts = tag.posts
+    return render_template('tag.html', tag=tag, posts=posts)
 
 @app.route('/search')
 @login_required
