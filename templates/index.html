@@ -1,41 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CARE</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>CARE</h1>
-        <p>Global Health and Education Promotion</p>
-    </header>
-    <main>
-        <h2>Welcome</h2>
-        <p>This is a platform for sharing ideas and advice on global health and education.</p>
+{% extends "base.html" %}
 
-        <section class="add-post">
-            <h3>Add a new post</h3>
-            <form action="{{ url_for('add_post') }}" method="post">
-                <input type="text" name="title" placeholder="Title" required>
-                <textarea name="content" placeholder="Content" required></textarea>
-                <button type="submit">Post</button>
-            </form>
-        </section>
-
-        <section class="posts">
-            <h3>Posts</h3>
-            {% for post in posts %}
-                <article>
-                    <h4>{{ post.title }}</h4>
-                    <p>{{ post.content }}</p>
-                </article>
+{% block content %}
+    <h1>Hi, {{ current_user.username }}!</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.title.label }}<br>
+            {{ form.title(size=32) }}<br>
+            {% for error in form.title.errors %}
+            <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2025 CARE</p>
-    </footer>
-</body>
-</html>
+        </p>
+        <p>
+            {{ form.content.label }}<br>
+            {{ form.content(size=140) }}<br>
+            {% for error in form.content.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <hr>
+    {% for post in posts %}
+        <article>
+            <p>
+                <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a> says: <b>{{ post.title }}</b>
+            </p>
+            <p>{{ post.content }}</p>
+        </article>
+    {% endfor %}
+{% endblock %}
