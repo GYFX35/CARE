@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash, g
+from flask import render_template, request, redirect, url_for, flash, g, jsonify
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm
 from app.models import User, Post, Comment, Category, Tag, Vote
@@ -67,6 +67,7 @@ def post(id):
     if form.validate_on_submit():
         comment = Comment(body=form.body.data, post=post, author=current_user)
         db.session.add(comment)
+        post.author.add_notification('unread_comment_count', post.comments.count())
         db.session.commit()
         flash('Your comment has been published.')
         return redirect(url_for('post', id=post.id))
@@ -99,6 +100,18 @@ def upvote(post_id):
     db.session.commit()
     flash('You have successfully upvoted this post.')
     return redirect(url_for('index'))
+
+@app.route('/notifications')
+@login_required
+def notifications():
+    since = request.args.get('since', 0.0, type=float)
+    notifications = current_user.notifications.filter(
+        Notification.timestamp > since).order_by(Notification.timestamp.asc())
+    return jsonify([{
+        'name': n.name,
+        'data': n.get_data(),
+        'timestamp': n.timestamp
+    } for n in notifications])
 
 @app.route('/search')
 @login_required

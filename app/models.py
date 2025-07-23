@@ -1,3 +1,5 @@
+import time
+import json
 from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,12 +10,19 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    notifications = db.relationship('Notification', backref='user', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def add_notification(self, name, data):
+        self.notifications.filter_by(name=name).delete()
+        n = Notification(name=name, payload_json=json.dumps(data), user=self)
+        db.session.add(n)
+        return n
 
 @login.user_loader
 def load_user(id):
@@ -34,6 +43,16 @@ class Post(db.Model):
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
     tags = db.relationship('Tag', secondary=tags, lazy='subquery',
         backref=db.backref('posts', lazy=True))
+
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    timestamp = db.Column(db.Float, index=True, default=time.time)
+    payload_json = db.Column(db.Text)
+
+    def get_data(self):
+        return json.loads(str(self.payload_json))
 
 class Vote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
