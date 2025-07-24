@@ -196,6 +196,21 @@ def data_posts_per_category():
 
 import requests
 
+@app.route('/unesco_data')
+def unesco_data():
+    indicators = {
+        'LR.AG15T99': 'Literacy rate, adult total (% of people ages 15 and above)',
+        'EA.PRIMARY.AG25T99.CUM': 'Educational attainment, at least completed primary, population 25+, total (%) (cumulative)',
+        'SE.PRM.ENRR': 'School enrollment, primary, both sexes (gross %)',
+        'SE.SEC.ENRR': 'School enrollment, secondary, both sexes (gross %)'
+    }
+    data = {}
+    for code, name in indicators.items():
+        url = f"http://data.uis.unesco.org/api/v1/data/indicator/{code}?format=json"
+        response = requests.get(url)
+        data[name] = response.json()['dataSets'][0]['series']
+    return render_template('unesco_data.html', title='UNESCO Data', data=data)
+
 @app.route('/who_data')
 def who_data():
     indicators = [
