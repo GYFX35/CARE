@@ -194,6 +194,25 @@ def data_posts_per_category():
     values = [row[1] for row in data]
     return jsonify({'labels': labels, 'values': values})
 
+import requests
+
+@app.route('/who_data')
+def who_data():
+    indicators = [
+        'WHOSIS_000001',
+        'WHOSIS_000004',
+        'WHOSIS_000010',
+        'WHOSIS_000012',
+        'NCD_GLUC_04',
+        'BP_04'
+    ]
+    data = {}
+    for indicator in indicators:
+        url = f"https://ghoapi.azureedge.net/api/{indicator}"
+        response = requests.get(url)
+        data[indicator] = response.json()['value']
+    return render_template('who_data.html', title='WHO Data', data=data)
+
 @app.route('/visualizations')
 def visualizations():
     return render_template('visualizations.html', title='Data Visualizations')

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>WHO Data</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Indicator</th>
+                <th>Country</th>
+                <th>Year</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for indicator, values in data.items() %}
+                {% for value in values %}
+                    <tr>
+                        <td>{{ value.IndicatorName }}</td>
+                        <td>{{ value.SpatialDim }}</td>
+                        <td>{{ value.TimeDim }}</td>
+                        <td>{{ value.NumericValue }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
