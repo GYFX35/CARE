@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>UNESCO Data</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Indicator</th>
+                <th>Country</th>
+                <th>Year</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for indicator, series_list in data.items() %}
+                {% for series_key, series_data in series_list.items() %}
+                    {% for observation in series_data.observations %}
+                        <tr>
+                            <td>{{ indicator }}</td>
+                            <td>{{ series_data.seriesTitle.split(',')[0] }}</td>
+                            <td>{{ observation[0] }}</td>
+                            <td>{{ observation[1] }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
