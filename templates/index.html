@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ _('Hi, %(username)s!', username=current_user.username) }}</h1>
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Welcome to CARE</h1>
+            <p>A community dedicated to global well-being, education, and training promotion, with a special focus on children's education and well-being. Share your ideas, join discussions, and help make a difference.</p>
+        </div>
+    </div>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
