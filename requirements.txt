@@ -1,0 +1,11 @@
+Flask
+flask_sqlalchemy
+flask_migrate
+flask_login
+flask_babel
+requests
+flask-wtf
+wtforms
+wtforms-sqlalchemy
+gunicorn
+python-dotenv
