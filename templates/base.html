@@ -4,72 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} - CARE</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1><a href="{{ url_for('index') }}">{{ _('CARE') }}</a></h1>
-        <nav>
-            <a href="{{ url_for('index') }}">{{ _('Home') }}</a>
-            {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">{{ _('Login') }}</a>
-            <a href="{{ url_for('register') }}">{{ _('Register') }}</a>
-            {% else %}
-            <a href="{{ url_for('user', username=current_user.username) }}">{{ _('Profile') }}</a>
-            <a href="{{ url_for('messages') }}">{{ _('Messages') }}</a>
-            <a href="{{ url_for('qa_sessions') }}">{{ _('Q&A Sessions') }}</a>
-            <a href="{{ url_for('resources') }}">{{ _('Resources') }}</a>
-            <a href="{{ url_for('visualizations') }}">{{ _('Visualizations') }}</a>
-            <a href="{{ url_for('who_data') }}">{{ _('WHO Data') }}</a>
-            <a href="{{ url_for('unesco_data') }}">{{ _('UNESCO Data') }}</a>
-            <a href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
-            <span id="comment_count" style="visibility: hidden;"></span>
-            {% endif %}
-            <form action="{{ url_for('search') }}" method="get">
-                {{ g.search_form.q(size=20, placeholder=_('Search')) }}
-                <input type="submit" value="{{ _('Go') }}">
-            </form>
-            <a href="{{ url_for('set_language', language='en') }}">English</a>
-            <a href="{{ url_for('set_language', language='es') }}">Español</a>
-        </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">{{ _('CARE') }}</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">{{ _('Home') }}</a>
+                    </li>
+                    {% if current_user.is_anonymous %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">{{ _('Login') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">{{ _('Register') }}</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">{{ _('Profile') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('messages') }}">{{ _('Messages') }} <span id="comment_count" class="badge bg-danger" style="visibility: hidden;"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('qa_sessions') }}">{{ _('Q&A Sessions') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('resources') }}">{{ _('Resources') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('visualizations') }}">{{ _('Visualizations') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('who_data') }}">{{ _('WHO Data') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('unesco_data') }}">{{ _('UNESCO Data') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <form class="d-flex" action="{{ url_for('search') }}" method="get">
+                    {{ g.search_form.q(class='form-control me-2', size=20, placeholder=_('Search')) }}
+                    <button class="btn btn-outline-success" type="submit">{{ _('Go') }}</button>
+                </form>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ _('Language') }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', language='en') }}">English</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', language='es') }}">Español</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <main>
+        {% if current_user.is_authenticated %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    </header>
-    <hr>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-    <main>
-    {% if current_user.is_authenticated %}
-    <script>
-        var since = 0;
-        setInterval(function() {
-            $.ajax('{{ url_for('notifications') }}?since=' + since).done(
-                function(notifications) {
-                    for (var i = 0; i < notifications.length; i++) {
-                        if (notifications[i].name == 'unread_comment_count')
-                            set_comment_count(notifications[i].data);
-                        since = notifications[i].timestamp;
-                    }
-                }
-            );
-        }, 10000);
-        function set_comment_count(n) {
-            $('#comment_count').text(n);
-            $('#comment_count').css('visibility', n ? 'visible' : 'hidden');
-        }
-    </script>
-    {% endif %}
-        {% block content %}{% endblock %}
-    </main>
-    <footer>
+        <script>
+            var since = 0;
+            $(document).ready(function() {
+                setInterval(function() {
+                    $.ajax('{{ url_for('notifications') }}?since=' + since).done(
+                        function(notifications) {
+                            for (var i = 0; i < notifications.length; i++) {
+                                if (notifications[i].name == 'unread_comment_count')
+                                    set_comment_count(notifications[i].data);
+                                since = notifications[i].timestamp;
+                            }
+                        }
+                    );
+                }, 10000);
+            });
+            function set_comment_count(n) {
+                $('#comment_count').text(n);
+                $('#comment_count').css('visibility', n ? 'visible' : 'hidden');
+            }
+        </script>
+        {% endif %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <footer class="container mt-5 pt-3 text-center">
         <p>&copy; 2025 CARE</p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -1,43 +1,54 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ _('Hi, %(username)s!', username=current_user.username) }}</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.title.label }}<br>
-            {{ form.title(size=32) }}<br>
-            {% for error in form.title.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.content.label }}<br>
-            {{ form.content(size=140) }}<br>
-            {% for error in form.content.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit(_('Submit')) }}</p>
-    </form>
+    <h1 class="mb-4">{{ _('Hi, %(username)s!', username=current_user.username) }}</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{{ _('New Post') }}</h5>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.title.label(class="form-label") }}
+                    {{ form.title(class="form-control", size=32) }}
+                    {% for error in form.title.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-3">
+                    {{ form.content.label(class="form-label") }}
+                    {{ form.content(class="form-control", rows=3) }}
+                    {% for error in form.content.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+        </div>
+    </div>
+
     <hr>
+
     {% for post in posts %}
-        <article>
-            <p>
-                <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a> says:
-                <b><a href="{{ url_for('post', id=post.id) }}">{{ post.title }}</a></b>
-                <span>({{ post.votes }} votes)</span>
-                <a href="{{ url_for('upvote', post_id=post.id) }}">Upvote</a>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title"><a href="{{ url_for('post', id=post.id) }}">{{ post.title }}</a></h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+                by <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
+                <span class="ms-2">({{ post.votes }} votes)</span>
+                <a href="{{ url_for('upvote', post_id=post.id) }}" class="btn btn-sm btn-outline-success ms-2">{{ _('Upvote') }}</a>
+            </h6>
+            <p class="card-text">{{ post.content }}</p>
+            <p class="card-text">
+                <small class="text-muted">
+                    Category: <a href="{{ url_for('category', id=post.category.id) }}">{{ post.category.name }}</a>
+                    |
+                    Tags:
+                    {% for tag in post.tags %}
+                        <a href="{{ url_for('tag', id=tag.id) }}"><span class="badge bg-secondary">{{ tag.name }}</span></a>
+                    {% endfor %}
+                </small>
             </p>
-            <p>{{ post.content }}</p>
-            <p>
-                Category: <a href="{{ url_for('category', id=post.category.id) }}">{{ post.category.name }}</a>
-                |
-                Tags:
-                {% for tag in post.tags %}
-                    <a href="{{ url_for('tag', id=tag.id) }}">{{ tag.name }}</a>
-                {% endfor %}
-            </p>
-        </article>
+        </div>
+    </div>
     {% endfor %}
 {% endblock %}

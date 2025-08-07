@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Messages</h1>
+    <h1>{{ _('Messages') }}</h1>
+    <div class="list-group">
     {% for message in messages %}
-        <p>
-            From: <a href="{{ url_for('user', username=message.author.username) }}">{{ message.author.username }}</a>
-            on {{ message.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
-        </p>
-        <p>{{ message.body }}</p>
+        <div class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">
+                    <a href="{{ url_for('user', username=message.author.username) }}">{{ message.author.username }}</a>
+                </h5>
+                <small>{{ message.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+            </div>
+            <p class="mb-1">{{ message.body }}</p>
+        </div>
     {% endfor %}
+    </div>
 {% endblock %}

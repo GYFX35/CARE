@@ -205,10 +205,15 @@ def unesco_data():
         'SE.SEC.ENRR': 'School enrollment, secondary, both sexes (gross %)'
     }
     data = {}
-    for code, name in indicators.items():
-        url = f"http://data.uis.unesco.org/api/v1/data/indicator/{code}?format=json"
-        response = requests.get(url)
-        data[name] = response.json()['dataSets'][0]['series']
+    try:
+        for code, name in indicators.items():
+            url = f"http://data.uis.unesco.org/api/v1/data/indicator/{code}?format=json"
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            data[name] = response.json()['dataSets'][0]['series']
+    except requests.exceptions.RequestException as e:
+        flash(f"Could not retrieve data from UNESCO API: {e}")
+        data = {}
     return render_template('unesco_data.html', title='UNESCO Data', data=data)
 
 @app.route('/who_data')
@@ -222,10 +227,15 @@ def who_data():
         'BP_04'
     ]
     data = {}
-    for indicator in indicators:
-        url = f"https://ghoapi.azureedge.net/api/{indicator}"
-        response = requests.get(url)
-        data[indicator] = response.json()['value']
+    try:
+        for indicator in indicators:
+            url = f"https://ghoapi.azureedge.net/api/{indicator}"
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            data[indicator] = response.json()['value']
+    except requests.exceptions.RequestException as e:
+        flash(f"Could not retrieve data from WHO API: {e}")
+        data = {}
     return render_template('who_data.html', title='WHO Data', data=data)
 
 @app.route('/visualizations')

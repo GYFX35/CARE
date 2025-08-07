@@ -1,0 +1,11 @@
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Login
+Flask-Babel
+Flask-WTF
+WTForms-SQLAlchemy
+requests
+gunicorn
+python-dotenv
+psycopg2-binary

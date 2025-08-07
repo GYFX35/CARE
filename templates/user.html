@@ -1,13 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ _('User: %(username)s', username=user.username) }}</h1>
-    <p><a href="{{ url_for('send_message', recipient=user.username) }}">{{ _('Send private message') }}</a></p>
-    <hr>
-    {% for post in posts %}
-    <article>
-        <h4>{{ post.title }}</h4>
-        <p>{{ post.content }}</p>
-    </article>
-    {% endfor %}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h1 class="card-title">{{ user.username }}</h1>
+                    <a href="{{ url_for('send_message', recipient=user.username) }}" class="btn btn-primary">{{ _('Send private message') }}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h2>{{ _('Posts by %(username)s', username=user.username) }}</h2>
+            <hr>
+            {% for post in posts %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ url_for('post', id=post.id) }}">{{ post.title }}</a></h5>
+                    <p class="card-text">{{ post.content }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
