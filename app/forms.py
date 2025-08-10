@@ -75,3 +75,7 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')
+
+class AIAgentForm(FlaskForm):
+    message = StringField(_l('Message'), validators=[DataRequired()])
+    submit = SubmitField(_l('Send'))

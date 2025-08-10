@@ -1,8 +1,8 @@
-from flask import render_template, request, redirect, url_for, flash, g, jsonify
+from flask import render_template, request, redirect, url_for, flash, g, jsonify, session
 from sqlalchemy import func
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm
+from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm, AIAgentForm
 from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource
 from flask_login import current_user, login_user, logout_user, login_required
 
@@ -258,3 +258,29 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+def get_ai_response(message):
+    # Mock AI response
+    if 'heart' in message.lower():
+        return "Cardiovascular health is crucial. Remember to maintain a balanced diet and exercise regularly."
+    elif 'headache' in message.lower():
+        return "For mild headaches, rest in a quiet, dark room and stay hydrated. If it persists, consult a doctor."
+    else:
+        return "I am a Medicine AI Agent. I can provide general information. For specific medical advice, please consult a qualified healthcare professional."
+
+@app.route('/ai_agent', methods=['GET', 'POST'])
+@login_required
+def ai_agent():
+    form = AIAgentForm()
+    if 'chat_history' not in session:
+        session['chat_history'] = []
+
+    if form.validate_on_submit():
+        user_message = form.message.data
+        ai_response = get_ai_response(user_message)
+        session['chat_history'].append({'sender': 'You', 'text': user_message})
+        session['chat_history'].append({'sender': 'AI Agent', 'text': ai_response})
+        session.modified = True
+        return redirect(url_for('ai_agent'))
+
+    return render_template('ai_agent.html', title='Medicine AI Agent', form=form, messages=session['chat_history'])
