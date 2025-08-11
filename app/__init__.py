@@ -10,14 +10,13 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
-babel = Babel(app)
-
 from flask import session
 
-@babel.localeselector
 def get_locale():
     if 'lang' in session:
         return session['lang']
     return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+babel = Babel(app, locale_selector=get_locale)
 
 from app import routes, models

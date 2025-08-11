@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash, g, jsonify
+from flask import render_template, request, redirect, url_for, flash, g, jsonify, send_from_directory
 from sqlalchemy import func
 from app import app, db
 from datetime import datetime
@@ -258,3 +258,11 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/manifest.json')
+def manifest():
+    return send_from_directory('static', 'manifest.json')
+
+@app.route('/sw.js')
+def service_worker():
+    return send_from_directory('static', 'sw.js')
