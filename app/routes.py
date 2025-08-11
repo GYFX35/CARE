@@ -5,6 +5,9 @@ from datetime import datetime
 from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm
 from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource
 from flask_login import current_user, login_user, logout_user, login_required
+import openai
+
+openai.api_key = app.config['OPENAI_API_KEY']
 
 @app.before_request
 def before_request():
@@ -258,3 +261,15 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/chatbot', methods=['GET', 'POST'])
+def chatbot():
+    if request.method == 'POST':
+        message = request.form['message']
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=message,
+            max_tokens=150
+        )
+        return jsonify({'response': response.choices[0].text.strip()})
+    return render_template('chatbot.html')
