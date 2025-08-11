@@ -20,6 +20,8 @@ class User(UserMixin, db.Model):
                                         backref='recipient', lazy='dynamic')
     last_message_read_time = db.Column(db.DateTime)
     is_expert = db.Column(db.Boolean, default=False)
+    profile_picture = db.Column(db.String(120), nullable=True)
+    push_subscriptions = db.relationship('PushSubscription', backref='user', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -112,3 +114,8 @@ class Comment(db.Model):
     body = db.Column(db.String(140))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class PushSubscription(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    subscription_json = db.Column(db.Text)

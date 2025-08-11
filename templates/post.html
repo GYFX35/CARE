@@ -17,13 +17,19 @@
                 <a href="{{ url_for('tag', id=tag.id) }}">{{ tag.name }}</a>
             {% endfor %}
         </p>
+        <div class="social-sharing">
+            <h4>Share this post:</h4>
+            <a href="https://twitter.com/intent/tweet?url={{ request.url }}&text={{ post.title }}" target="_blank">Twitter</a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank">Facebook</a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.url }}&title={{ post.title }}&summary={{ post.content }}" target="_blank">LinkedIn</a>
+        </div>
     </article>
     <hr>
     <section class="comments">
         <h3>{{ _('Comments') }}</h3>
         {% for comment in comments %}
             <article>
-                <p><a href="{{ url_for('user', username=comment.author.username) }}">{{ comment.author.username }}</a> {{ _('says:') }}</p>
+                <p><img src="{{ comment.author.profile_picture or url_for('static', filename='default_avatar.png') }}" alt="Profile Picture" width="32" height="32"> <a href="{{ url_for('user', username=comment.author.username) }}">{{ comment.author.username }}</a> {{ _('says:') }}</p>
                 <p>{{ comment.body }}</p>
             </article>
         {% endfor %}

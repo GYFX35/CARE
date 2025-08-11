@@ -3,8 +3,12 @@ from sqlalchemy import func
 from app import app, db
 from datetime import datetime
 from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm
-from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource
+from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource, PushSubscription
 from flask_login import current_user, login_user, logout_user, login_required
+from pywebpush import webpush
+import json
+import base64
+import os
 
 @app.before_request
 def before_request():
@@ -71,6 +75,7 @@ def post(id):
         db.session.add(comment)
         post.author.add_notification('unread_comment_count', post.comments.count())
         db.session.commit()
+        send_push_notification(post.author, f"New comment on your post '{post.title}'", f"{current_user.username}: {form.body.data}")
         flash('Your comment has been published.')
         return redirect(url_for('post', id=post.id))
     comments = post.comments.all()
@@ -125,6 +130,7 @@ def send_message(recipient):
                       body=form.message.data)
         db.session.add(msg)
         db.session.commit()
+        send_push_notification(user, f"New message from {current_user.username}", form.message.data)
         flash('Your message has been sent.')
         return redirect(url_for('user', username=recipient))
     return render_template('send_message.html', title='Send Message',
@@ -258,3 +264,38 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+def send_push_notification(user, title, body):
+    for subscription in user.push_subscriptions:
+        try:
+            webpush(
+                subscription_info=json.loads(subscription.subscription_json),
+                data=json.dumps({'title': title, 'body': body}),
+                vapid_private_key=app.config['VAPID_PRIVATE_KEY'],
+                vapid_claims=app.config['VAPID_CLAIMS']
+            )
+        except Exception as e:
+            print(f"Error sending push notification: {e}")
+
+@app.route('/push_subscribe', methods=['POST'])
+@login_required
+def push_subscribe():
+    subscription_info = request.get_json()
+    subscription = PushSubscription(user_id=current_user.id, subscription_json=json.dumps(subscription_info))
+    db.session.add(subscription)
+    db.session.commit()
+    return jsonify({'success': True})
+
+@app.route('/upload_profile_picture', methods=['POST'])
+@login_required
+def upload_profile_picture():
+    data = request.get_json()
+    image_data = data['image'].split(',')[1]
+    filename = f"{current_user.id}.png"
+    filepath = os.path.join(app.static_folder, 'profile_pics', filename)
+    os.makedirs(os.path.join(app.static_folder, 'profile_pics'), exist_ok=True)
+    with open(filepath, 'wb') as f:
+        f.write(base64.b64decode(image_data))
+    current_user.profile_picture = url_for('static', filename=f'profile_pics/{filename}')
+    db.session.commit()
+    return jsonify({'success': True})

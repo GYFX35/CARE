@@ -24,6 +24,7 @@
     {% for post in posts %}
         <article>
             <p>
+                <img src="{{ post.author.profile_picture or url_for('static', filename='default_avatar.png') }}" alt="Profile Picture" width="32" height="32">
                 <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a> says:
                 <b><a href="{{ url_for('post', id=post.id) }}">{{ post.title }}</a></b>
                 <span>({{ post.votes }} votes)</span>
