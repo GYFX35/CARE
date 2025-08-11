@@ -14,10 +14,11 @@ babel = Babel(app)
 
 from flask import session
 
-@babel.localeselector
 def get_locale():
     if 'lang' in session:
         return session['lang']
     return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+babel.init_app(app, locale_selector=get_locale)
 
 from app import routes, models

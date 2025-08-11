@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="chat-container">
+    <div id="chat-window"></div>
+    <input type="text" id="chat-input" placeholder="Type your message here...">
+    <button id="send-btn">Send</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('#send-btn').on('click', function() {
+        var message = $('#chat-input').val();
+        if (message) {
+            $('#chat-window').append('<div><strong>You:</strong> ' + message + '</div>');
+            $('#chat-input').val('');
+            $.post('/chatbot', {message: message}).done(function(data) {
+                $('#chat-window').append('<div><strong>Bot:</strong> ' + data.response + '</div>');
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
