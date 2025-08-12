@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='games.css') }}">
+<h1>Memory Game</h1>
+<div id="game-board"></div>
+<p>Score: <span id="score">0</span></p>
+<button id="restart-btn">Restart</button>
+<script src="{{ url_for('static', filename='games.js') }}"></script>
+{% endblock %}
