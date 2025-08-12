@@ -119,3 +119,10 @@ class GameScore(db.Model):
     game = db.Column(db.String(128))
     score = db.Column(db.Integer)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+class FitnessProgress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    date = db.Column(db.Date, index=True, default=datetime.utcnow)
+    exercises_completed = db.Column(db.Integer, default=0)
+    workout_streak = db.Column(db.Integer, default=0)

@@ -5,7 +5,9 @@ from app.models import User, Post, Category
 class UserModelCase(unittest.TestCase):
     def setUp(self):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
+        app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
+        app.config['OPENAI_API_KEY'] = 'dummy'
         self.app_context = app.app_context()
         self.app_context.push()
         db.create_all()
@@ -24,7 +26,9 @@ class UserModelCase(unittest.TestCase):
 class PostModelCase(unittest.TestCase):
     def setUp(self):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
+        app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
+        app.config['OPENAI_API_KEY'] = 'dummy'
         self.app_context = app.app_context()
         self.app_context.push()
         db.create_all()

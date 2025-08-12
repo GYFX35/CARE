@@ -18,7 +18,7 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.submit(_('Submit')) }}</p>
+        <p>{{ form.submit() }}</p>
     </form>
     <hr>
     {% for post in posts %}

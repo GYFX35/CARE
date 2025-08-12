@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='fitness_game.css') }}">
+<div class="game-container">
+    <h1>Fitness Challenge</h1>
+    <div class="exercise-area">
+        <h2 id="exercise-name">Get Ready!</h2>
+        <div id="exercise-media">
+            <!-- Placeholder for an image or animation -->
+            <img id="exercise-image" src="https://via.placeholder.com/300" alt="Exercise Image">
+        </div>
+        <p id="exercise-description">Welcome to the fitness challenge! I'll guide you through a series of exercises to help you get stronger and healthier. Click "Start Workout" to begin!</p>
+        <div id="exercise-info">
+            <p>Reps: <span id="reps">--</span></p>
+            <p>Sets: <span id="sets">--</span></p>
+        </div>
+        <button id="start-workout-btn">Start Workout</button>
+        <button id="next-exercise-btn" style="display: none;">Next Exercise</button>
+    </div>
+
+    <div class="progress-area">
+        <h3>Your Progress</h3>
+        <p>Exercises Completed: <span id="exercises-completed">0</span></p>
+        <p>Workout Streak: <span id="workout-streak">0 days</span></p>
+    </div>
+
+    <div class="ai-coach-area">
+        <h3>AI Fitness Coach</h3>
+        <div id="chat-box">
+            <div class="message coach-message">
+                <p>Hello! I'm your AI Fitness Coach. I can answer your questions about the exercises and provide motivation. Let's get started!</p>
+            </div>
+            <!-- Messages will be appended here -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Ask a question...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='fitness_game.js') }}"></script>
+{% endblock %}
