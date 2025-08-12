@@ -5,9 +5,7 @@ from datetime import datetime
 from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm
 from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource
 from flask_login import current_user, login_user, logout_user, login_required
-import openai
-
-openai.api_key = app.config['OPENAI_API_KEY']
+from openai import OpenAI
 
 @app.before_request
 def before_request():
@@ -245,6 +243,11 @@ def set_language(language=None):
 def games():
     return render_template('games.html', title='Educational Games')
 
+@app.route('/fitness_game')
+@login_required
+def fitness_game():
+    return render_template('fitness_game.html', title='Fitness Game')
+
 @app.route('/search')
 @login_required
 def search():
@@ -270,11 +273,28 @@ def register():
 @app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():
     if request.method == 'POST':
+        client = OpenAI(api_key=app.config['OPENAI_API_KEY'])
         message = request.form['message']
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=message,
-            max_tokens=150
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": message}
+            ]
         )
-        return jsonify({'response': response.choices[0].text.strip()})
+        return jsonify({'response': response.choices[0].message.content})
     return render_template('chatbot.html')
+
+@app.route('/fitness_coach', methods=['POST'])
+def fitness_coach():
+    client = OpenAI(api_key=app.config['OPENAI_API_KEY'])
+    message = request.form['message']
+    prompt = f"You are a friendly and encouraging fitness coach. A user has asked you the following question about their workout: '{message}'. Provide a helpful and motivating response."
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a friendly and encouraging fitness coach."},
+            {"role": "user", "content": message}
+        ]
+    )
+    return jsonify({'response': response.choices[0].message.content})
