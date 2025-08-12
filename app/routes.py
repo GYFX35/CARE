@@ -240,6 +240,11 @@ def set_language(language=None):
     session['lang'] = language
     return redirect(url_for('index'))
 
+@app.route('/games')
+@login_required
+def games():
+    return render_template('games.html', title='Educational Games')
+
 @app.route('/search')
 @login_required
 def search():
