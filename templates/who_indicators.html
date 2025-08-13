@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>WHO Indicators</h1>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.indicators.label }}<br>
+            {{ form.indicators(size=20) }}
+        </div>
+        <div class="form-group">
+            {{ form.submit() }}
+        </div>
+    </form>
+{% endblock %}

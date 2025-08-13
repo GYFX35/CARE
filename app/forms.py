@@ -5,7 +5,11 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User, Category
 
-from wtforms import DateTimeField
+from wtforms import DateTimeField, SelectMultipleField
+
+class WHOIndicatorForm(FlaskForm):
+    indicators = SelectMultipleField(_l('Indicators'), coerce=str, validators=[DataRequired()])
+    submit = SubmitField(_l('Get Data'))
 
 class ResourceForm(FlaskForm):
     title = StringField(_l('Title'), validators=[DataRequired()])

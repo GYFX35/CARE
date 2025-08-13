@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash, g, jsonify
 from sqlalchemy import func
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm
+from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm, WHOIndicatorForm
 from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource
 from flask_login import current_user, login_user, logout_user, login_required
 from openai import OpenAI
@@ -212,22 +212,56 @@ def unesco_data():
         data[name] = response.json()['dataSets'][0]['series']
     return render_template('unesco_data.html', title='UNESCO Data', data=data)
 
+from flask import session
+
+def get_who_indicators():
+    if 'who_indicators' not in session:
+        try:
+            url = "https://ghoapi.azureedge.net/api/Indicator"
+            response = requests.get(url)
+            response.raise_for_status()  # Raise an exception for bad status codes
+            session['who_indicators'] = response.json()['value']
+        except requests.exceptions.RequestException as e:
+            flash(f"Error fetching WHO indicators: {e}")
+            return []
+    return session['who_indicators']
+
+@app.route('/who_indicators', methods=['GET', 'POST'])
+def who_indicators():
+    form = WHOIndicatorForm()
+    indicators = get_who_indicators()
+    if not indicators:
+        return render_template('who_indicators.html', title='WHO Indicators', form=form, error="Could not fetch indicators.")
+
+    form.indicators.choices = [(indicator['IndicatorCode'], indicator['IndicatorName']) for indicator in indicators]
+
+    if form.validate_on_submit():
+        return redirect(url_for('who_data', indicators=','.join(form.indicators.data)))
+
+    return render_template('who_indicators.html', title='WHO Indicators', form=form)
+
 @app.route('/who_data')
 def who_data():
-    indicators = [
-        'WHOSIS_000001',
-        'WHOSIS_000004',
-        'WHOSIS_000010',
-        'WHOSIS_000012',
-        'NCD_GLUC_04',
-        'BP_04'
-    ]
+    indicators_str = request.args.get('indicators')
+    if not indicators_str:
+        flash('Please select at least one indicator.')
+        return redirect(url_for('who_indicators'))
+
+    indicators = indicators_str.split(',')
     data = {}
+    indicator_names = {ind['IndicatorCode']: ind['IndicatorName'] for ind in get_who_indicators()}
+
     for indicator in indicators:
-        url = f"https://ghoapi.azureedge.net/api/{indicator}"
-        response = requests.get(url)
-        data[indicator] = response.json()['value']
-    return render_template('who_data.html', title='WHO Data', data=data)
+        try:
+            url = f"https://ghoapi.azureedge.net/api/{indicator}"
+            response = requests.get(url)
+            response.raise_for_status()
+            data[indicator] = response.json()['value']
+        except requests.exceptions.RequestException as e:
+            flash(f"Error fetching data for indicator {indicator}: {e}")
+            data[indicator] = []
+
+    return render_template('who_data.html', title='WHO Data', data=data, indicator_names=indicator_names)
 
 @app.route('/visualizations')
 def visualizations():
