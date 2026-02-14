@@ -1,7 +1,7 @@
 from flask import request
 from flask_wtf import FlaskForm
 from flask_babel import lazy_gettext as _l
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User, Category
 
@@ -17,6 +17,12 @@ class ResourceForm(FlaskForm):
     url = StringField(_l('URL'), validators=[DataRequired()])
     resource_type = StringField(_l('Resource Type'), validators=[DataRequired()])
     submit = SubmitField(_l('Add Resource'))
+
+class PodcastForm(FlaskForm):
+    title = StringField(_l('Title'), validators=[DataRequired()])
+    description = TextAreaField(_l('Description'), validators=[DataRequired()])
+    url = StringField(_l('URL'), validators=[DataRequired()])
+    submit = SubmitField(_l('Add Podcast'))
 
 class QASessionForm(FlaskForm):
     title = StringField(_l('Title'), validators=[DataRequired()])

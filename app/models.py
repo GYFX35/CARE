@@ -126,3 +126,13 @@ class FitnessProgress(db.Model):
     date = db.Column(db.Date, index=True, default=datetime.utcnow)
     exercises_completed = db.Column(db.Integer, default=0)
     workout_streak = db.Column(db.Integer, default=0)
+
+class Podcast(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(140))
+    description = db.Column(db.Text)
+    url = db.Column(db.String(200))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Podcast {}>'.format(self.title)
