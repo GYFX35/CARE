@@ -2,8 +2,8 @@ from flask import render_template, request, redirect, url_for, flash, g, jsonify
 from sqlalchemy import func
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm, WHOIndicatorForm
-from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource
+from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm, WHOIndicatorForm, PodcastForm
+from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource, Podcast
 from flask_login import current_user, login_user, logout_user, login_required
 from openai import OpenAI
 
@@ -20,6 +20,7 @@ def index():
         db.session.add(Category(name='Health'))
         db.session.add(Category(name='Education'))
         db.session.add(Category(name='Technology'))
+        db.session.add(Category(name='News'))
         db.session.commit()
     if form.validate_on_submit():
         post = Post(title=form.title.data, content=form.content.data, author=current_user, category=form.category.data)
@@ -173,6 +174,38 @@ def resources():
     resources = Resource.query.all()
     return render_template('resources.html', title='Resources', resources=resources)
 
+
+@app.route('/podcasts')
+def podcasts():
+    podcasts = Podcast.query.order_by(Podcast.timestamp.desc()).all()
+    return render_template('podcasts.html', title='Podcasts', podcasts=podcasts)
+
+@app.route('/collaboration')
+@login_required
+def collaboration():
+    if current_user.role not in ['Telecom Actor', 'Company']:
+        flash('This page is reserved for Telecom actors and companies.')
+        return redirect(url_for('index'))
+    news_category = Category.query.filter_by(name='News').first()
+    news_posts = Post.query.filter_by(category=news_category).order_by(Post.id.desc()).all()
+    podcasts = Podcast.query.order_by(Podcast.timestamp.desc()).all()
+    return render_template('collaboration.html', title='Collaboration Hub', news_posts=news_posts, podcasts=podcasts)
+
+@app.route('/submit_podcast', methods=['GET', 'POST'])
+@login_required
+def submit_podcast():
+    form = PodcastForm()
+    if form.validate_on_submit():
+        podcast = Podcast(title=form.title.data,
+                          description=form.description.data,
+                          video_url=form.video_url.data,
+                          author=current_user)
+        db.session.add(podcast)
+        db.session.commit()
+        flash('Your podcast has been submitted!')
+        return redirect(url_for('podcasts'))
+    return render_template('submit_podcast.html', title='Submit Podcast', form=form)
+
 @app.route('/add_resource', methods=['GET', 'POST'])
 @login_required
 def add_resource():
@@ -296,7 +329,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, email=form.email.data, role=form.role.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()

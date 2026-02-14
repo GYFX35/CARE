@@ -19,6 +19,10 @@
             <a href="{{ url_for('messages') }}">{{ _('Messages') }}</a>
             <a href="{{ url_for('qa_sessions') }}">{{ _('Q&A Sessions') }}</a>
             <a href="{{ url_for('resources') }}">{{ _('Resources') }}</a>
+            <a href="{{ url_for('podcasts') }}">{{ _('Podcasts') }}</a>
+            {% if current_user.role in ['Telecom Actor', 'Company'] %}
+            <a href="{{ url_for('collaboration') }}">{{ _('Collaboration Hub') }}</a>
+            {% endif %}
             <a href="{{ url_for('visualizations') }}">{{ _('Visualizations') }}</a>
             <a href="{{ url_for('who_indicators') }}">{{ _('WHO Data') }}</a>
             <a href="{{ url_for('unesco_data') }}">{{ _('UNESCO Data') }}</a>

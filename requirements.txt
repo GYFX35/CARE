@@ -10,3 +10,4 @@ wtforms-sqlalchemy
 gunicorn
 python-dotenv
 openai
+email-validator

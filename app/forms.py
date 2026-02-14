@@ -1,7 +1,7 @@
 from flask import request
 from flask_wtf import FlaskForm
 from flask_babel import lazy_gettext as _l
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User, Category
 
@@ -10,6 +10,12 @@ from wtforms import DateTimeField, SelectMultipleField
 class WHOIndicatorForm(FlaskForm):
     indicators = SelectMultipleField(_l('Indicators'), coerce=str, validators=[DataRequired()])
     submit = SubmitField(_l('Get Data'))
+
+class PodcastForm(FlaskForm):
+    title = StringField(_l("Title"), validators=[DataRequired()])
+    description = TextAreaField(_l("Description"), validators=[DataRequired()])
+    video_url = StringField(_l("Video URL (e.g., YouTube Link)"), validators=[DataRequired()])
+    submit = SubmitField(_l("Submit Podcast"))
 
 class ResourceForm(FlaskForm):
     title = StringField(_l('Title'), validators=[DataRequired()])
@@ -68,6 +74,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField(_l('Password'), validators=[DataRequired()])
     password2 = PasswordField(
         _l('Repeat Password'), validators=[DataRequired(), EqualTo('password')])
+    role = SelectField(_l("Role"), choices=[("Regular User", "Regular User"), ("Telecom Actor", "Telecom Actor"), ("Company", "Company")], validators=[DataRequired()])
     submit = SubmitField(_l('Register'))
 
     def validate_username(self, username):

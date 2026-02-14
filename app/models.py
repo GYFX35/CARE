@@ -20,6 +20,7 @@ class User(UserMixin, db.Model):
                                         backref='recipient', lazy='dynamic')
     last_message_read_time = db.Column(db.DateTime)
     is_expert = db.Column(db.Boolean, default=False)
+    role = db.Column(db.String(20), default="Regular User")
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -62,6 +63,15 @@ class Notification(db.Model):
 
     def get_data(self):
         return json.loads(str(self.payload_json))
+
+class Podcast(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(140))
+    description = db.Column(db.Text)
+    video_url = db.Column(db.String(200))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    author = db.relationship("User", backref="podcasts", lazy=True)
 
 class Resource(db.Model):
     id = db.Column(db.Integer, primary_key=True)

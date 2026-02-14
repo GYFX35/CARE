@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Telecom & Company Collaboration Hub</h1>
+    <p>Welcome, {{ current_user.username }} ({{ current_user.role }}). Use this space to collaborate on news and podcasts.</p>
+
+    <div class="collaboration-sections">
+        <section>
+            <h2>News Collaboration</h2>
+            <p><a href="{{ url_for('index') }}">Submit News</a> (Select 'News' category)</p>
+            <h3>Recent News</h3>
+            {% if news_posts %}
+                <ul>
+                {% for post in news_posts %}
+                    <li>
+                        <b><a href="{{ url_for('post', id=post.id) }}">{{ post.title }}</a></b> by {{ post.author.username }}
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No news posts yet.</p>
+            {% endif %}
+        </section>
+
+        <section>
+            <h2>Podcast Collaboration</h2>
+            <p><a href="{{ url_for('submit_podcast') }}">Submit a New Podcast/Video</a></p>
+            <h3>Recent Podcasts</h3>
+            {% if podcasts %}
+                <ul>
+                {% for podcast in podcasts %}
+                    <li>
+                        <b>{{ podcast.title }}</b> submitted by {{ podcast.author.username }}
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No podcasts yet.</p>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}
