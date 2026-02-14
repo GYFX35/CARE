@@ -2,8 +2,8 @@ from flask import render_template, request, redirect, url_for, flash, g, jsonify
 from sqlalchemy import func
 from app import app, db
 from datetime import datetime
-from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm, WHOIndicatorForm
-from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource
+from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm, WHOIndicatorForm, PodcastForm
+from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource, Podcast
 from flask_login import current_user, login_user, logout_user, login_required
 from openai import OpenAI
 
@@ -187,6 +187,25 @@ def add_resource():
         flash('The resource has been added.')
         return redirect(url_for('resources'))
     return render_template('add_resource.html', title='Add Resource', form=form)
+
+@app.route('/podcasts')
+def podcasts():
+    podcasts = Podcast.query.order_by(Podcast.timestamp.desc()).all()
+    return render_template('podcasts.html', title='Podcasts', podcasts=podcasts)
+
+@app.route('/add_podcast', methods=['GET', 'POST'])
+@login_required
+def add_podcast():
+    form = PodcastForm()
+    if form.validate_on_submit():
+        podcast = Podcast(title=form.title.data,
+                          description=form.description.data,
+                          url=form.url.data)
+        db.session.add(podcast)
+        db.session.commit()
+        flash('The podcast has been added.')
+        return redirect(url_for('podcasts'))
+    return render_template('add_podcast.html', title='Add Podcast', form=form)
 
 @app.route('/data/posts_per_category')
 def data_posts_per_category():

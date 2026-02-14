@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Podcasts</h1>
+    <p><a href="{{ url_for('add_podcast') }}">Add a new podcast</a></p>
+    <hr>
+    {% for podcast in podcasts %}
+        <article>
+            <h2><a href="{{ podcast.url }}">{{ podcast.title }}</a></h2>
+            <p>{{ podcast.description }}</p>
+            <p><small>Added on: {{ podcast.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small></p>
+        </article>
+    {% else %}
+        <p>No podcasts available yet.</p>
+    {% endfor %}
+{% endblock %}
