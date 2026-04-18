@@ -349,6 +349,10 @@ def chatbot():
         return jsonify({'response': response_text})
     return render_template('chatbot.html', title='AI Assistant')
 
+@app.route('/sponsorship')
+def sponsorship():
+    return render_template('sponsorship.html', title='Sponsorship')
+
 @app.route('/fitness_coach', methods=['POST'])
 def fitness_coach():
     client = OpenAI(api_key=app.config['OPENAI_API_KEY'])
