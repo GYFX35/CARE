@@ -1,16 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="card" style="max-width: 600px; margin: 2rem auto;">
     <h1>Send Message to {{ recipient }}</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.message.label }}<br>
-            {{ form.message(cols=32, rows=4) }}<br>
+        <div class="form-group">
+            {{ form.message.label(class="form-label") }}
+            {{ form.message(rows=4, class="form-control", placeholder=_('Type your message here...')) }}
             {% for error in form.message.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <span class="error-text" role="alert">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
+        </div>
+        <p>{{ form.submit(class="btn") }}</p>
     </form>
+    <a href="{{ url_for('user', username=recipient) }}" class="btn btn-secondary">Back to Profile</a>
+</div>
 {% endblock %}

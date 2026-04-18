@@ -1,37 +1,45 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="card" style="max-width: 400px; margin: 2rem auto;">
     <h1>{{ _('Register') }}</h1>
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
+        <div class="form-group">
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control", aria_required="true") }}
             {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <span class="error-text" role="alert">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.email.label }}<br>
-            {{ form.email(size=64) }}<br>
+        </div>
+        <div class="form-group">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control", aria_required="true") }}
             {% for error in form.email.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <span class="error-text" role="alert">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
+        </div>
+        <div class="form-group">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control", aria_required="true") }}
             {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <span class="error-text" role="alert">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password2.label }}<br>
-            {{ form.password2(size=32) }}<br>
+        </div>
+        <div class="form-group">
+            {{ form.password2.label(class="form-label") }}
+            {{ form.password2(class="form-control", aria_required="true") }}
             {% for error in form.password2.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <span class="error-text" role="alert">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
+        </div>
+        <p>{{ form.submit(class="btn") }}</p>
     </form>
+</div>
+
+<style>
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-weight: bold; margin-bottom: 0.25rem; }
+    .error-text { color: #dc3545; font-size: 0.875rem; }
+</style>
 {% endblock %}

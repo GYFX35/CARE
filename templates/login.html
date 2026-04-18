@@ -1,25 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="card" style="max-width: 400px; margin: 2rem auto;">
     <h1>{{ _('Sign In') }}</h1>
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
+        <div class="form-group">
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control", placeholder=_('Enter your username'), aria_required="true") }}
             {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <span class="error-text" role="alert">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
+        </div>
+        <div class="form-group">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control", placeholder=_('Enter your password'), aria_required="true") }}
             {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <span class="error-text" role="alert">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-            <p>{{ form.submit() }}</p>
+        </div>
+        <div class="form-group">
+            <label>
+                {{ form.remember_me() }} {{ form.remember_me.label }}
+            </label>
+        </div>
+        <p>{{ form.submit(class="btn") }}</p>
     </form>
     <p>{{ _('New User?') }} <a href="{{ url_for('register') }}">{{ _('Click to Register!') }}</a></p>
+</div>
+
+<style>
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-weight: bold; margin-bottom: 0.25rem; }
+    .error-text { color: #dc3545; font-size: 0.875rem; }
+</style>
 {% endblock %}

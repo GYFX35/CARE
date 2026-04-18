@@ -2,11 +2,20 @@
 
 {% block content %}
     <h1>Messages</h1>
+    <div class="messages-container">
     {% for message in messages %}
-        <p>
-            From: <a href="{{ url_for('user', username=message.author.username) }}">{{ message.author.username }}</a>
-            on {{ message.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
-        </p>
-        <p>{{ message.body }}</p>
+        <div class="message-bubble message-received">
+            <div style="font-size: 0.8rem; color: var(--light-text); margin-bottom: 0.3rem;">
+                From: <a href="{{ url_for('user', username=message.author.username) }}">{{ message.author.username }}</a>
+                on {{ message.timestamp.strftime('%Y-%m-%d %H:%M') }}
+            </div>
+            <div>{{ message.body }}</div>
+            <div style="margin-top: 0.5rem;">
+                <a href="{{ url_for('send_message', recipient=message.author.username) }}" class="btn btn-secondary" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;">Reply</a>
+            </div>
+        </div>
+    {% else %}
+        <p>You have no messages.</p>
     {% endfor %}
+    </div>
 {% endblock %}

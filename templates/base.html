@@ -15,39 +15,47 @@
             <a href="{{ url_for('login') }}">{{ _('Login') }}</a>
             <a href="{{ url_for('register') }}">{{ _('Register') }}</a>
             {% else %}
-            <a href="{{ url_for('user', username=current_user.username) }}">{{ _('Profile') }}</a>
             <a href="{{ url_for('messages') }}">{{ _('Messages') }}</a>
-            <a href="{{ url_for('qa_sessions') }}">{{ _('Q&A Sessions') }}</a>
+            <a href="{{ url_for('qa_sessions') }}">{{ _('Q&A') }}</a>
             <a href="{{ url_for('resources') }}">{{ _('Resources') }}</a>
             <a href="{{ url_for('podcasts') }}">{{ _('Podcasts') }}</a>
-            <a href="{{ url_for('visualizations') }}">{{ _('Visualizations') }}</a>
-            <a href="{{ url_for('who_indicators') }}">{{ _('WHO Data') }}</a>
-            <a href="{{ url_for('unesco_data') }}">{{ _('UNESCO Data') }}</a>
-            <a href="{{ url_for('chatbot') }}">{{ _('Chatbot') }}</a>
-            <a href="{{ url_for('games') }}">{{ _('Games') }}</a>
-            <a href="{{ url_for('fitness_game') }}">{{ _('Fitness Game') }}</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">{{ _('Tools') }}</a>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('visualizations') }}">{{ _('Visualizations') }}</a>
+                    <a href="{{ url_for('who_indicators') }}">{{ _('WHO Data') }}</a>
+                    <a href="{{ url_for('unesco_data') }}">{{ _('UNESCO Data') }}</a>
+                    <a href="{{ url_for('chatbot') }}">{{ _('Chatbot') }}</a>
+                    <a href="{{ url_for('games') }}">{{ _('Games') }}</a>
+                    <a href="{{ url_for('fitness_game') }}">{{ _('Fitness Game') }}</a>
+                </div>
+            </div>
+            <a href="{{ url_for('user', username=current_user.username) }}">{{ current_user.username }}</a>
             <a href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
-            <span id="comment_count" style="visibility: hidden;"></span>
+            <span id="comment_count" class="badge" style="display: none;"></span>
             {% endif %}
             <form action="{{ url_for('search') }}" method="get">
                 {{ g.search_form.q(size=20, placeholder=_('Search')) }}
                 <input type="submit" value="{{ _('Go') }}">
             </form>
-            <a href="{{ url_for('set_language', language='en') }}">English</a>
-            <a href="{{ url_for('set_language', language='es') }}">Español</a>
+            <div class="lang-switch">
+                <a href="{{ url_for('set_language', language='en') }}">EN</a> |
+                <a href="{{ url_for('set_language', language='es') }}">ES</a>
+            </div>
         </nav>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </header>
-    <hr>
+
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-    <ul>
+    <div class="flash-messages">
         {% for message in messages %}
-        <li>{{ message }}</li>
+        <div class="flash-message">{{ message }}</div>
         {% endfor %}
-    </ul>
+    </div>
     {% endif %}
     {% endwith %}
+
     <main>
     {% if current_user.is_authenticated %}
     <script>
@@ -64,16 +72,74 @@
             );
         }, 10000);
         function set_comment_count(n) {
-            $('#comment_count').text(n);
-            $('#comment_count').css('visibility', n ? 'visible' : 'hidden');
+            var countEl = $('#comment_count');
+            countEl.text(n);
+            if (n > 0) {
+                countEl.show();
+            } else {
+                countEl.hide();
+            }
         }
     </script>
     {% endif %}
         {% block content %}{% endblock %}
     </main>
+
     <footer>
-        <p>&copy; 2025 CARE</p>
+        <p>&copy; 2025 CARE - Global Well-being & Education</p>
     </footer>
+
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {background-color: #f1f1f1}
+        .dropdown:hover .dropdown-content {display: block;}
+
+        .badge {
+            background-color: red;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            vertical-align: top;
+            margin-left: -5px;
+        }
+
+        .flash-messages {
+            max-width: 1000px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+        }
+        .flash-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+        }
+        .lang-switch {
+            font-size: 0.8rem;
+            margin-left: 1rem;
+        }
+    </style>
     {% block scripts %}{% endblock %}
 </body>
 </html>

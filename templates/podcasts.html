@@ -1,16 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Podcasts</h1>
-    <p><a href="{{ url_for('add_podcast') }}">Add a new podcast</a></p>
-    <hr>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1>Podcasts & Videos</h1>
+        <a href="{{ url_for('add_podcast') }}" class="btn">Add New Media</a>
+    </div>
+
     {% for podcast in podcasts %}
-        <article>
-            <h2><a href="{{ podcast.url }}">{{ podcast.title }}</a></h2>
+        <article class="card">
+            <h2>{{ podcast.title }}</h2>
             <p>{{ podcast.description }}</p>
-            <p><small>Added on: {{ podcast.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small></p>
+
+            {% if 'youtube.com' in podcast.url or 'youtu.be' in podcast.url %}
+                <div class="video-container">
+                    {% set video_id = podcast.url.split('v=')[1].split('&')[0] if 'v=' in podcast.url else podcast.url.split('/')[-1] %}
+                    <iframe src="https://www.youtube.com/embed/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            {% elif 'vimeo.com' in podcast.url %}
+                <div class="video-container">
+                    {% set video_id = podcast.url.split('/')[-1] %}
+                    <iframe src="https://player.vimeo.com/video/{{ video_id }}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+                </div>
+            {% else %}
+                <p><a href="{{ podcast.url }}" target="_blank" class="btn btn-secondary">Listen / Watch External</a></p>
+            {% endif %}
+
+            <p style="margin-top: 1rem;"><small>Added on: {{ podcast.timestamp.strftime('%Y-%m-%d %H:%M') }}</small></p>
         </article>
     {% else %}
-        <p>No podcasts available yet.</p>
+        <div class="card">
+            <p>No podcasts or videos available yet.</p>
+        </div>
     {% endfor %}
 {% endblock %}
