@@ -1,29 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>UNESCO Data</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Indicator</th>
-                <th>Country</th>
-                <th>Year</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for indicator, series_list in data.items() %}
-                {% for series_key, series_data in series_list.items() %}
-                    {% for observation in series_data.observations %}
+    <div class="mb-4">
+        <h2 class="fw-bold"><i class="fas fa-university text-primary me-2"></i>UNESCO Data</h2>
+        <p class="text-muted">Educational statistics and literacy rates from UNESCO Global Database.</p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <td>{{ indicator }}</td>
-                            <td>{{ series_data.seriesTitle.split(',')[0] }}</td>
-                            <td>{{ observation[0] }}</td>
-                            <td>{{ observation[1] }}</td>
+                            <th class="ps-4">Indicator</th>
+                            <th>Country / Region</th>
+                            <th>Year</th>
+                            <th class="pe-4 text-end">Value</th>
                         </tr>
-                    {% endfor %}
-                {% endfor %}
-            {% endfor %}
-        </tbody>
-    </table>
+                    </thead>
+                    <tbody>
+                        {% for indicator, series_list in data.items() %}
+                            {% for series_key, series_data in series_list.items() %}
+                                {% for observation in series_data.observations %}
+                                    <tr>
+                                        <td class="ps-4 small fw-medium">{{ indicator }}</td>
+                                        <td>{{ series_data.seriesTitle.split(',')[0] }}</td>
+                                        <td class="text-muted">{{ observation[0] }}</td>
+                                        <td class="pe-4 text-end fw-bold text-primary">{{ observation[1] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}

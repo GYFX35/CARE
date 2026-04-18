@@ -23,3 +23,10 @@ def get_locale():
 babel.init_app(app, locale_selector=get_locale)
 
 from app import routes, models
+
+from flask import send_from_directory
+import os
+
+@app.route('/frontend/<path:filename>')
+def serve_frontend(filename):
+    return send_from_directory(os.path.join(app.root_path, '../frontend'), filename)

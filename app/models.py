@@ -53,6 +53,11 @@ class Post(db.Model):
     tags = db.relationship('Tag', secondary=tags, lazy='subquery',
         backref=db.backref('posts', lazy=True))
 
+    @classmethod
+    def search(cls, query, page, per_page):
+        search = Post.query.filter(Post.title.contains(query) | Post.content.contains(query))
+        return search.offset((page - 1) * per_page).limit(per_page).all(), search.count()
+
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), index=True)
@@ -92,11 +97,6 @@ class Vote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
-
-    @classmethod
-    def search(cls, query, page, per_page):
-        search = Post.query.filter(Post.title.contains(query) | Post.content.contains(query))
-        return search.offset((page - 1) * per_page).limit(per_page).all(), search.count()
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)

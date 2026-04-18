@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Magazine - CARE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -20,54 +21,71 @@
         </nav>
     </header>
     <main>
-        <h1>Digital Magazine</h1>
-        <p>Your source for news and discussions on global health, education, and environmental protection.</p>
+        <h1 class="mb-4 text-center">Digital Magazine</h1>
+        <p class="text-center mb-5 lead">Your source for news and discussions on global health, education, and environmental protection.</p>
 
-        <section id="health">
-            <h2>Global Health</h2>
-            <article>
-                <h3>Breaking Barriers in Healthcare Access</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
-                <a href="#">Read More</a>
-            </article>
-            <article>
-                <h3>The Fight Against Tropical Diseases</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
-                <a href="#">Read More</a>
-            </article>
-        </section>
+        <div class="row">
+            <div class="col-lg-8">
+                <section id="health" class="mb-5">
+                    <h2 class="mb-4 border-bottom pb-2">Global Health</h2>
+                    <article>
+                        <h3>Breaking Barriers in Healthcare Access</h3>
+                        <p class="text-muted small">March 10, 2025 | Global Health Team</p>
+                        <p>We explore new initiatives aimed at providing affordable healthcare to underserved communities around the world.</p>
+                        <a href="#">Read More &rarr;</a>
+                    </article>
+                    <article>
+                        <h3>The Fight Against Tropical Diseases</h3>
+                        <p class="text-muted small">March 5, 2025 | Research Department</p>
+                        <p>Recent breakthroughs in vaccine development are offering new hope in the battle against malaria and dengue fever.</p>
+                        <a href="#">Read More &rarr;</a>
+                    </article>
+                </section>
 
-        <section id="education">
-            <h2>Education</h2>
-            <article>
-                <h3>Innovations in Online Learning</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
-                <a href="#">Read More</a>
-            </article>
-            <article>
-                <h3>Closing the Educational Gap in Developing Nations</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
-                <a href="#">Read More</a>
-            </article>
-        </section>
+                <section id="education" class="mb-5">
+                    <h2 class="mb-4 border-bottom pb-2">Education</h2>
+                    <article>
+                        <h3>Innovations in Online Learning</h3>
+                        <p class="text-muted small">March 8, 2025 | EdTech Insight</p>
+                        <p>Discover how AI and interactive platforms are transforming the educational landscape for remote students.</p>
+                        <a href="#">Read More &rarr;</a>
+                    </article>
+                    <article>
+                        <h3>Closing the Educational Gap</h3>
+                        <p class="text-muted small">March 2, 2025 | Policy Watch</p>
+                        <p>A look at the global efforts to ensure every child has access to quality primary and secondary education.</p>
+                        <a href="#">Read More &rarr;</a>
+                    </article>
+                </section>
+            </div>
 
-        <section id="environment">
-            <h2>Environmental Protection</h2>
-            <article>
-                <h3>The Push for Renewable Energy Sources</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
-                <a href="#">Read More</a>
-            </article>
-            <article>
-                <h3>Conservation Efforts in the Amazon Rainforest</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
-                <a href="#">Read More</a>
-            </article>
-        </section>
+            <div class="col-lg-4">
+                <aside class="sticky-top" style="top: 20px;">
+                    <section class="bg-light p-4 rounded-3 border-0">
+                        <h4 class="mb-3">Featured Topics</h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="#health" class="text-decoration-none">Global Health</a></li>
+                            <li class="mb-2"><a href="#education" class="text-decoration-none">Education</a></li>
+                            <li class="mb-2"><a href="#environment" class="text-decoration-none">Environment</a></li>
+                        </ul>
+                    </section>
+                    <section class="mt-4 bg-primary text-white p-4 rounded-3 border-0">
+                        <h4 class="mb-3">Subscribe</h4>
+                        <p class="small">Get the latest magazine updates delivered to your inbox.</p>
+                        <form>
+                            <input type="email" class="form-control mb-2" placeholder="Email Address">
+                            <button type="button" class="btn btn-light w-100 fw-bold">Join Now</button>
+                        </form>
+                    </section>
+                </aside>
+            </div>
+        </div>
 
     </main>
     <footer>
         <p>&copy; 2025 CARE. All rights reserved.</p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
