@@ -1,25 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ _('Sign In') }}</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-            <p>{{ form.submit() }}</p>
-    </form>
-    <p>{{ _('New User?') }} <a href="{{ url_for('register') }}">{{ _('Click to Register!') }}</a></p>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-heartbeat text-primary fa-3x mb-3"></i>
+                    <h2 class="fw-bold">{{ _('Sign In') }}</h2>
+                    <p class="text-muted">{{ _('Welcome back to CARE') }}</p>
+                </div>
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.username.label(class="form-label fw-bold") }}
+                        {{ form.username(class="form-control", placeholder=_('Enter your username')) }}
+                        {% for error in form.username.errors %}
+                        <div class="text-danger small mt-1">[{{ error }}]</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label fw-bold") }}
+                        {{ form.password(class="form-control", placeholder=_('Enter your password')) }}
+                        {% for error in form.password.errors %}
+                        <div class="text-danger small mt-1">[{{ error }}]</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4 form-check">
+                        {{ form.remember_me(class="form-check-input") }}
+                        {{ form.remember_me.label(class="form-check-label") }}
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary btn-lg fw-bold") }}
+                    </div>
+                </form>
+                <div class="text-center mt-4">
+                    <p class="mb-0 text-muted">{{ _('New User?') }} <a href="{{ url_for('register') }}" class="text-decoration-none fw-bold">{{ _('Click to Register!') }}</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
