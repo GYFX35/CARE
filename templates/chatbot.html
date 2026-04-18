@@ -1,24 +1,81 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id="chat-container">
-    <div id="chat-window"></div>
-    <input type="text" id="chat-input" placeholder="Type your message here...">
-    <button id="send-btn">Send</button>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <i class="fas fa-robot me-2"></i>
+                    <h5 class="mb-0">CARE AI Assistant</h5>
+                </div>
+                <div class="card-body bg-light" style="height: 500px; overflow-y: auto;" id="chat-window">
+                    <div class="mb-3 text-start">
+                        <div class="d-inline-block p-3 rounded bg-white shadow-sm">
+                            Hello! I'm your CARE AI Assistant. How can I help you with our project activities today?
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="input-group">
+                        <input type="text" id="chat-input" class="form-control" placeholder="Ask about project activities, health, or education..." aria-label="Recipient's username">
+                        <button class="btn btn-primary" type="button" id="send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
 $(document).ready(function() {
+    function scrollToBottom() {
+        var chatWindow = $('#chat-window');
+        chatWindow.scrollTop(chatWindow[0].scrollHeight);
+    }
+
+    function appendMessage(role, message) {
+        var alignment = role === 'You' ? 'text-end' : 'text-start';
+        var bgColor = role === 'You' ? 'bg-primary text-white' : 'bg-white';
+        var html = '<div class="mb-3 ' + alignment + '">' +
+                   '<div class="d-inline-block p-3 rounded shadow-sm ' + bgColor + '" style="max-width: 80%;">' +
+                   '<strong>' + role + ':</strong> ' + message +
+                   '</div></div>';
+        $('#chat-window').append(html);
+        scrollToBottom();
+    }
+
     $('#send-btn').on('click', function() {
         var message = $('#chat-input').val();
         if (message) {
-            $('#chat-window').append('<div><strong>You:</strong> ' + message + '</div>');
+            appendMessage('You', message);
             $('#chat-input').val('');
+
+            // Show typing indicator
+            var typingHtml = '<div id="typing-indicator" class="mb-3 text-start">' +
+                             '<div class="d-inline-block p-3 rounded bg-white shadow-sm">' +
+                             '<i class="fas fa-circle-notch fa-spin"></i> Assistant is thinking...' +
+                             '</div></div>';
+            $('#chat-window').append(typingHtml);
+            scrollToBottom();
+
             $.post('/chatbot', {message: message}).done(function(data) {
-                $('#chat-window').append('<div><strong>Bot:</strong> ' + data.response + '</div>');
+                $('#typing-indicator').remove();
+                appendMessage('Assistant', data.response);
+            }).fail(function() {
+                $('#typing-indicator').remove();
+                appendMessage('System', 'Sorry, something went wrong. Please try again later.');
             });
+        }
+    });
+
+    $('#chat-input').on('keypress', function(e) {
+        if(e.which == 13) {
+            $('#send-btn').click();
         }
     });
 });

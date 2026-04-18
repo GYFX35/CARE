@@ -6,6 +6,7 @@ from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, Search
 from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource, Podcast, Notification
 from flask_login import current_user, login_user, logout_user, login_required
 from openai import OpenAI
+from app.ai_assistant import get_ai_assistant_response
 
 @app.before_request
 def before_request():
@@ -324,19 +325,13 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/chatbot', methods=['GET', 'POST'])
+@login_required
 def chatbot():
     if request.method == 'POST':
-        client = OpenAI(api_key=app.config['OPENAI_API_KEY'])
         message = request.form['message']
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": message}
-            ]
-        )
-        return jsonify({'response': response.choices[0].message.content})
-    return render_template('chatbot.html')
+        response_text = get_ai_assistant_response(message)
+        return jsonify({'response': response_text})
+    return render_template('chatbot.html', title='AI Assistant')
 
 @app.route('/fitness_coach', methods=['POST'])
 def fitness_coach():
