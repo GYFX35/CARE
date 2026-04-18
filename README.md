@@ -2,6 +2,33 @@
 This app is so global opinions,advice forums app
 Global development ideas sharing and talking app.
 
+## AI Assistant
+
+The CARE platform now features an integrated AI Assistant to help users with project activities, health information, and educational resources. The assistant is built using **LangChain** and **OpenAI**, with optional support for **Google Search** to provide up-to-date information.
+
+### Setting Up the AI Assistant
+
+To enable the AI Assistant, you need to set up the following environment variables in your `.env` file or environment:
+
+1.  **OpenAI API Key (Required):**
+    ```
+    OPENAI_API_KEY=your_openai_api_key
+    ```
+    You can obtain this from the [OpenAI Platform](https://platform.openai.com/).
+
+2.  **Google Search Integration (Optional):**
+    To allow the assistant to search the web for the latest information:
+    ```
+    GOOGLE_API_KEY=your_google_api_key
+    GOOGLE_CSE_ID=your_custom_search_engine_id
+    ```
+    *   **GOOGLE_API_KEY:** Obtain from the [Google Cloud Console](https://console.cloud.google.com/). Enable the "Custom Search API".
+    *   **GOOGLE_CSE_ID:** Create a Custom Search Engine at [Google Programmable Search Engine](https://programmablesearchengine.google.com/) and get the Search Engine ID.
+
+### How to Use
+
+Once configured, logged-in users can access the AI Assistant by navigating to the `/chatbot` route or clicking on the "AI Assistant" link in the navigation menu.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

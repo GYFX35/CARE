@@ -10,4 +10,6 @@ class Config:
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+    GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
+    GOOGLE_CSE_ID = os.environ.get('GOOGLE_CSE_ID')
     LANGUAGES = ['en', 'es']
