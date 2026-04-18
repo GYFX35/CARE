@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <section class="bg-white p-5 rounded-4 shadow-sm">
+        <h1 class="mb-4 text-danger">{{ _('Promoting Global Well-being') }}</h1>
+        <p class="lead">{{ _('Well-being encompasses physical health, mental wellness, and social stability. We strive to improve the quality of life for individuals and communities worldwide.') }}</p>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>{{ _('Physical Health') }}</h3>
+                <p>{{ _('We support initiatives that provide clean water, nutrition, and essential healthcare services. Our focus is on preventing diseases and promoting healthy lifestyles from a young age.') }}</p>
+            </div>
+            <div class="col-md-6">
+                <h3>{{ _('Mental Wellness') }}</h3>
+                <p>{{ _('Mental health is just as important as physical health. We provide resources and forums for discussing mental wellness, reducing stigma, and offering support to those in need.') }}</p>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h3>{{ _('Our Focus Areas') }}</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item border-0"><i class="fas fa-heart text-danger me-2"></i> {{ _('Maternal and child health programs.') }}</li>
+                <li class="list-group-item border-0"><i class="fas fa-brain text-primary me-2"></i> {{ _('Mental health awareness and support networks.') }}</li>
+                <li class="list-group-item border-0"><i class="fas fa-pills text-success me-2"></i> {{ _('Access to essential medicines and vaccines.') }}</li>
+            </ul>
+        </div>
+    </section>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('topics') }}" class="btn btn-secondary shadow-sm">{{ _('Back to Topics') }}</a>
+    </div>
+</div>
+{% endblock %}

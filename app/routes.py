@@ -324,6 +324,22 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+@app.route('/topics')
+def topics():
+    return render_template('topics.html', title='Project Topics')
+
+@app.route('/topics/education')
+def education_topic():
+    return render_template('education.html', title='Education')
+
+@app.route('/topics/well-being')
+def wellbeing_topic():
+    return render_template('well-being.html', title='Well-being')
+
+@app.route('/topics/environment')
+def environment_topic():
+    return render_template('environment.html', title='Environment')
+
 @app.route('/chatbot', methods=['GET', 'POST'])
 @login_required
 def chatbot():
