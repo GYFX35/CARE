@@ -1,13 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ _('User: %(username)s', username=user.username) }}</h1>
-    <p><a href="{{ url_for('send_message', recipient=user.username) }}">{{ _('Send private message') }}</a></p>
-    <hr>
-    {% for post in posts %}
-    <article>
-        <h4>{{ post.title }}</h4>
-        <p>{{ post.content }}</p>
-    </article>
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-0">
+            <div class="bg-primary" style="height: 150px; border-radius: 0.5rem 0.5rem 0 0;"></div>
+            <div class="px-4 pb-4">
+                <div class="d-flex align-items-end mb-3" style="margin-top: -50px;">
+                    <div class="bg-white p-1 rounded-circle shadow-sm">
+                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; font-size: 2.5rem;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3 mb-2">
+                        <h2 class="fw-bold mb-0">{{ user.username }}</h2>
+                        <p class="text-muted mb-0">{{ _('Member since') }}: {{ user.id }}</p> <!-- Assuming ID or some date if available -->
+                    </div>
+                    <div class="ms-auto mb-2">
+                        {% if user != current_user %}
+                        <a href="{{ url_for('send_message', recipient=user.username) }}" class="btn btn-outline-primary fw-bold">
+                            <i class="fas fa-envelope me-1"></i> {{ _('Message') }}
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <h4 class="fw-bold"><i class="fas fa-stream me-2"></i>{{ _('Activity Feed') }}</h4>
+    </div>
+
+    {% for post in posts|sort(attribute='id', reverse=True) %}
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+            <h5 class="fw-bold"><a href="{{ url_for('post', id=post.id) }}" class="text-decoration-none text-dark">{{ post.title }}</a></h5>
+            <p class="text-secondary">{{ post.content }}</p>
+            <div class="d-flex justify-content-between align-items-center small mt-3">
+                <span class="text-muted">
+                    <i class="fas fa-tag me-1"></i> {{ post.category.name }}
+                </span>
+                <span class="text-muted">
+                    <i class="far fa-thumbs-up me-1"></i> {{ post.votes }} {{ _('Votes') }}
+                </span>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-ghost fa-3x text-light mb-3"></i>
+        <p class="text-muted">{{ _('No posts yet.') }}</p>
+    </div>
     {% endfor %}
 {% endblock %}

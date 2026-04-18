@@ -3,7 +3,7 @@ from sqlalchemy import func
 from app import app, db
 from datetime import datetime
 from app.forms import LoginForm, RegistrationForm, PostForm, CommentForm, SearchForm, MessageForm, QASessionForm, ResourceForm, WHOIndicatorForm, PodcastForm
-from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource, Podcast
+from app.models import User, Post, Comment, Category, Tag, Vote, Message, QASession, Resource, Podcast, Notification
 from flask_login import current_user, login_user, logout_user, login_required
 from openai import OpenAI
 
