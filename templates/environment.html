@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <section class="bg-white p-5 rounded-4 shadow-sm">
+        <h1 class="mb-4 text-success">{{ _('Protecting Our Environment') }}</h1>
+        <p class="lead">{{ _('A healthy planet is essential for the well-being of future generations. We advocate for sustainable practices and environmental protection.') }}</p>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>{{ _('Sustainability') }}</h3>
+                <p>{{ _('We promote sustainable development that meets the needs of the present without compromising the ability of future generations to meet their own needs.') }}</p>
+            </div>
+            <div class="col-md-6">
+                <h3>{{ _('Climate Action') }}</h3>
+                <p>{{ _('Addressing climate change is a global priority. We support education on environmental issues and initiatives that reduce carbon footprints and protect biodiversity.') }}</p>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h3>{{ _('Our Initiatives') }}</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item border-0"><i class="fas fa-leaf text-success me-2"></i> {{ _('Environmental education programs in schools.') }}</li>
+                <li class="list-group-item border-0"><i class="fas fa-sun text-warning me-2"></i> {{ _('Support for renewable energy projects in rural areas.') }}</li>
+                <li class="list-group-item border-0"><i class="fas fa-globe-africa text-primary me-2"></i> {{ _('Advocacy for policies that protect natural resources.') }}</li>
+            </ul>
+        </div>
+    </section>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('topics') }}" class="btn btn-secondary shadow-sm">{{ _('Back to Topics') }}</a>
+    </div>
+</div>
+{% endblock %}

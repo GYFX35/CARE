@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4 text-center">{{ _('Our Project Topics') }}</h1>
+    <p class="text-center mb-5 lead">{{ _('Explore the core pillars of our mission to improve global well-being and education.') }}</p>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-book-open fa-3x text-primary"></i>
+                    </div>
+                    <h3>{{ _('Education') }}</h3>
+                    <p>{{ _('Focusing on innovations in learning and closing the global educational gap for children.') }}</p>
+                    <a href="{{ url_for('education_topic') }}" class="btn btn-outline-primary">{{ _('Learn More') }}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-heartbeat fa-3x text-danger"></i>
+                    </div>
+                    <h3>{{ _('Well-being') }}</h3>
+                    <p>{{ _('Promoting physical health, mental wellness, and access to quality healthcare worldwide.') }}</p>
+                    <a href="{{ url_for('wellbeing_topic') }}" class="btn btn-outline-danger">{{ _('Learn More') }}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-leaf fa-3x text-success"></i>
+                    </div>
+                    <h3>{{ _('Environment') }}</h3>
+                    <p>{{ _('Working towards sustainability and environmental protection for a healthier planet.') }}</p>
+                    <a href="{{ url_for('environment_topic') }}" class="btn btn-outline-success">{{ _('Learn More') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

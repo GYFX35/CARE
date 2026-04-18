@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <section class="bg-white p-5 rounded-4 shadow-sm">
+        <h1 class="mb-4">{{ _('Empowering Through Education') }}</h1>
+        <p class="lead">{{ _('Education is the cornerstone of global development. At CARE, we focus on innovative approaches to make quality education accessible to every child.') }}</p>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>{{ _('Innovations in Learning') }}</h3>
+                <p>{{ _('We leverage technology to create interactive and engaging learning experiences. From AI-driven personalized learning to virtual classrooms, we are at the forefront of educational technology.') }}</p>
+            </div>
+            <div class="col-md-6">
+                <h3>{{ _('Closing the Gap') }}</h3>
+                <p>{{ _('Millions of children still lack access to basic education. Our programs aim to bridge this gap by supporting schools in underserved communities and providing resources for teachers.') }}</p>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h3>{{ _('Our Goals') }}</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item border-0"><i class="fas fa-check-circle text-success me-2"></i> {{ _('Increase primary school enrollment in developing regions.') }}</li>
+                <li class="list-group-item border-0"><i class="fas fa-check-circle text-success me-2"></i> {{ _('Promote digital literacy among children and educators.') }}</li>
+                <li class="list-group-item border-0"><i class="fas fa-check-circle text-success me-2"></i> {{ _('Support vocational training and lifelong learning opportunities.') }}</li>
+            </ul>
+        </div>
+    </section>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('topics') }}" class="btn btn-secondary shadow-sm">{{ _('Back to Topics') }}</a>
+    </div>
+</div>
+{% endblock %}
