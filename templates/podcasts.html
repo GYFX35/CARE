@@ -21,6 +21,18 @@
                             {% set video_id = podcast.url.split('v=')[1] if 'v=' in podcast.url else podcast.url.split('/')[-1] %}
                             <iframe src="https://www.youtube.com/embed/{{ video_id }}" allowfullscreen></iframe>
                         </div>
+                    {% elif 'vimeo.com' in podcast.url %}
+                        <div class="ratio ratio-16x9 mb-3">
+                            {% set video_id = podcast.url.split('/')[-1] %}
+                            <iframe src="https://player.vimeo.com/video/{{ video_id }}" allowfullscreen></iframe>
+                        </div>
+                    {% elif podcast.url.lower().endswith(('.mp3', '.wav', '.ogg')) %}
+                        <div class="mb-3">
+                            <audio controls class="w-100">
+                                <source src="{{ podcast.url }}" type="audio/{{ 'mpeg' if podcast.url.lower().endswith('.mp3') else podcast.url.split('.')[-1].lower() }}">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
                     {% endif %}
 
                     <div class="d-flex justify-content-between align-items-center mt-auto">
