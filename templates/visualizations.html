@@ -1,8 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Data Visualizations</h1>
-    <canvas id="postsPerCategoryChart" width="400" height="400"></canvas>
+    <div class="mb-4">
+        <h2 class="fw-bold"><i class="fas fa-chart-bar text-primary me-2"></i>Data Visualizations</h2>
+        <p class="text-muted">Analyzing community activity and global statistics.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0 fw-bold">Posts per Category</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div style="height: 400px;">
+                        <canvas id="postsPerCategoryChart"></canvas>
+                    </div>
+                </div>
+                <div class="card-footer bg-light border-0 small text-muted">
+                    <i class="fas fa-info-circle me-1"></i> Data updated in real-time based on community posts.
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
